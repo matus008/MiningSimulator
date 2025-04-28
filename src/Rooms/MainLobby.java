@@ -1,5 +1,7 @@
 package Rooms;
 
+import Player.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -50,7 +52,7 @@ public class MainLobby extends JFrame {
         shopButton.setFont(new Font("Arial", Font.BOLD, 24));
         shopButton.setBounds(screenSize.width * 3 / 4 - 75, screenSize.height / 2 - 50, 150, 100);
         shopButton.addActionListener(e -> {
-            new Shop();
+            new Shop(new Player());
             dispose();
         });
         add(shopButton);
