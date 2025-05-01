@@ -8,6 +8,7 @@ import java.awt.*;
 public class MainLobby extends JFrame {
 
     public MainLobby() {
+        Player player = new Player();
         setTitle("Main Lobby");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
@@ -43,7 +44,7 @@ public class MainLobby extends JFrame {
         mineButton.setFont(new Font("Arial", Font.BOLD, 24));
         mineButton.setBounds(screenSize.width / 4 - 75, screenSize.height / 2 - 50, 150, 100);
         mineButton.addActionListener(e -> {
-            new Mine();
+            new Mine(player);
             dispose();
         });
         add(mineButton);
@@ -52,7 +53,7 @@ public class MainLobby extends JFrame {
         shopButton.setFont(new Font("Arial", Font.BOLD, 24));
         shopButton.setBounds(screenSize.width * 3 / 4 - 75, screenSize.height / 2 - 50, 150, 100);
         shopButton.addActionListener(e -> {
-            new Shop(new Player());
+            new Shop(player);
             dispose();
         });
         add(shopButton);

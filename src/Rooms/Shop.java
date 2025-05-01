@@ -9,10 +9,7 @@ import Player.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Shop extends JFrame {
     private ArrayList<Item> upgrades;
@@ -40,7 +37,7 @@ public class Shop extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1, 10,10));
+        panel.setLayout(new GridLayout(0, 1, 10, 10));
         panel.setBackground(Color.LIGHT_GRAY);
 
         JLabel label = new JLabel("Welcome to the SHOP!", SwingConstants.CENTER);
@@ -79,21 +76,29 @@ public class Shop extends JFrame {
         int quantity = 1;
 
         if (item instanceof Column || item instanceof Dynamite || item instanceof Laddre) {
-            System.out.print("How many units would you like to buy? (default 1): ");
-            String input = new Scanner(System.in).nextLine();
+            String input = JOptionPane.showInputDialog(null,
+                    "How many units would you like to buy? (default 1):",
+                    "Purchase Quantity",
+                    JOptionPane.QUESTION_MESSAGE);
 
-            if (input.isEmpty()) {
+            if (input == null || input.trim().isEmpty()) {
                 input = "1";
             }
 
             try {
-                quantity = Integer.parseInt(input);
+                quantity = Integer.parseInt(input.trim());
                 if (quantity <= 0) {
-                    System.out.println("Invalid quantity! Must be a positive number.");
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid quantity! Must be a positive number.",
+                            "Input Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             } catch (NumberFormatException ex) {
-                System.out.println("Invalid input! Please enter a valid number.");
+                JOptionPane.showMessageDialog(null,
+                        "Invalid input! Please enter a valid number.",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }

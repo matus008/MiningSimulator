@@ -1,19 +1,18 @@
 package Rooms;
 
+import Player.Player;
 import javax.swing.*;
-import java.awt.*;
 
 public class Mine extends JFrame {
-    public Mine() {
-        setTitle("MINE");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(true);
+    public Mine(Player player) {
+        setTitle("Mine");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(800, 800);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-        JLabel label = new JLabel("Welcome to the MINE!", SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 36));
-        add(label);
-
+        MinePanel minePanel = new MinePanel(player);
+        add(minePanel);
         setVisible(true);
     }
 }
