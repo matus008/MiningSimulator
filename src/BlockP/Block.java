@@ -1,4 +1,4 @@
-package Rooms;
+package BlockP;
 
 import java.awt.*;
 import javax.swing.*;
@@ -7,12 +7,12 @@ public class Block {
     private BlockType type;
     private boolean mined;
 
-    private static final Image dirtImg = new ImageIcon("src/Rooms/Textures/dirt.png").getImage();
-    private static final Image coalImg = new ImageIcon("src/Rooms/Textures/cole.png").getImage();
-    private static final Image goldImg = new ImageIcon("src/Rooms/Textures/gold.png").getImage();
-    private static final Image diamondImg = new ImageIcon("src/Rooms/Textures/diamond.png").getImage();
-    private static final Image emptyImg = new ImageIcon("src/Rooms/Textures/dirt.png").getImage();
-    private static final Image silverImg = new ImageIcon("src/Rooms/Textures/silver.png").getImage();
+    private static final Image dirtImg = new ImageIcon("src/Textures/dirt.png").getImage();
+    private static final Image coalImg = new ImageIcon("src/Textures/cole.png").getImage();
+    private static final Image goldImg = new ImageIcon("src/Textures/gold.png").getImage();
+    private static final Image diamondImg = new ImageIcon("src/Textures/diamond.png").getImage();
+    private static final Image emptyImg = new ImageIcon("src/Textures/dirt.png").getImage();
+    private static final Image silverImg = new ImageIcon("src/Textures/silver.png").getImage();
 
     public Block(BlockType type) {
         this.type = type;

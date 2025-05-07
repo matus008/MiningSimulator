@@ -1,4 +1,4 @@
-package Rooms;
+package BlockP;
 
 import java.util.Random;
 
@@ -6,7 +6,7 @@ public class BlockGenerator {
     private static final Random random = new Random();
 
     public static Block generateRandomBlock() {
-        int chance = random.nextInt(100);
+        int chance = random.nextInt(101) + 1;
         if (chance < 60){
             return new Block(BlockType.DIRT);
         }else if (chance < 75){

@@ -23,11 +23,11 @@ public class Shop extends JFrame {
     }
 
     private void initializeItems() {
-        upgrades.add(new BackpackUpgrade(300, "Backpack Upgrade"));
+        upgrades.add(new BackpackUpgrade(300, "BackpackUpgrade"));
         upgrades.add(new Column(50, "Column"));
         upgrades.add(new Dynamite(100, "Dynamite"));
         upgrades.add(new Laddre(75, "Ladder"));
-        upgrades.add(new PicxakeUpgrade(500, "Pickaxe Upgrade"));
+        upgrades.add(new PicxakeUpgrade(500, "PickaxeUpgrade"));
     }
 
     private void initializeGUI() {
@@ -74,6 +74,10 @@ public class Shop extends JFrame {
 
     private void handlePurchase(Item item) {
         int quantity = 1;
+        //mozna jeste pridat LIGHTUPGRADE podle casu
+        if (item instanceof PicxakeUpgrade || item instanceof BackpackUpgrade){
+            player.PlusUpgrade(item);
+        }
 
         if (item instanceof Column || item instanceof Dynamite || item instanceof Laddre) {
             String input = JOptionPane.showInputDialog(null,

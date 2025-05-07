@@ -1,7 +1,10 @@
 package Rooms;
 
+import BlockP.Block;
+import BlockP.BlockGenerator;
+import BlockP.BlockType;
 import Player.Player;
-import Valuables.*;
+import BlockP.Valuables.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,13 +98,21 @@ public class MinePanel extends JPanel implements KeyListener {
             if (type != BlockType.DIRT) {
                 try {
                     Ores ore = switch (type) {
-                        case COAL -> new Cole();
+                        case COAL -> new Coal();
                         case SILVER -> new Silver();
                         case GOLD -> new Gold();
                         case DIAMOND -> new Diamond();
                         default -> null;
                     };
-                    if (ore != null) player.addOre(ore);
+                    if (ore != null){
+                        if (player.getBackPackSize() < player.getBackpack().size()){
+                            player.addOre(ore);
+                        }else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Your back pack is full!");
+                        }
+                    }
+
                 } catch (Exception ignored) {}
             }
         }

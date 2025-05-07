@@ -1,4 +1,4 @@
-package Valuables;
+package BlockP.Valuables;
 
 public class Gold extends Ores{
     public Gold() {

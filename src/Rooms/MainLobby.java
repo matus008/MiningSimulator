@@ -18,7 +18,7 @@ public class MainLobby extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         // nacteni obrazku do pozadi
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/Rooms/MiningSimulator - MainLobby.jpg"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("src/Textures/MiningSimulator - MainLobby.jpg"));
         JLabel backgroundLabel = new JLabel(backgroundImage);
         backgroundLabel.setLayout(new BorderLayout());
 
