@@ -18,7 +18,7 @@ public class MainLobby extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         // nacteni obrazku do pozadi
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("src/Textures/MiningSimulator - MainLobby.jpg"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/Textures/MiningSimulator - MainLobby.jpg"));
         JLabel backgroundLabel = new JLabel(backgroundImage);
         backgroundLabel.setLayout(new BorderLayout());
 
@@ -44,7 +44,7 @@ public class MainLobby extends JFrame {
         mineButton.setFont(new Font("Arial", Font.BOLD, 24));
         mineButton.setBounds(screenSize.width / 4 - 75, screenSize.height / 2 - 50, 150, 100);
         mineButton.addActionListener(e -> {
-            new Mine(player);
+            new MineJFrame(player);
             dispose();
         });
         add(mineButton);

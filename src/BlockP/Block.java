@@ -8,7 +8,7 @@ public class Block {
     private boolean mined;
 
     private static final Image dirtImg = new ImageIcon("src/Textures/dirt.png").getImage();
-    private static final Image coalImg = new ImageIcon("src/Textures/cole.png").getImage();
+    private static final Image coalImg = new ImageIcon("src/Textures/coal.png").getImage();
     private static final Image goldImg = new ImageIcon("src/Textures/gold.png").getImage();
     private static final Image diamondImg = new ImageIcon("src/Textures/diamond.png").getImage();
     private static final Image emptyImg = new ImageIcon("src/Textures/dirt.png").getImage();

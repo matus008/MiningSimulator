@@ -12,16 +12,20 @@ import java.awt.event.*;
 
 public class MinePanel extends JPanel implements KeyListener {
 
-    private static final int BlockSize = 100;
+    private static final int BLOCK_SIZE = 100;
     private static final int MAP_WIDTH = 100;
     private static final int MAP_HEIGHT = 100;
 
     private Block[][] map;
     private Player player;
 
-    // Player position on the map
+    // Pozice hráče na mapě
     private int playerX = 50;
     private int playerY = 50;
+
+    // Kamera (počet bloků, ne pixelů)
+    private int cameraWidthInBlocks;
+    private int cameraHeightInBlocks;
 
     public MinePanel(Player player) {
         this.player = player;
@@ -31,6 +35,11 @@ public class MinePanel extends JPanel implements KeyListener {
 
         setFocusable(true);
         addKeyListener(this);
+
+        // Dynamicky spočítat kolik bloků se vejde na obrazovku
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        cameraWidthInBlocks = screenSize.width / BLOCK_SIZE;
+        cameraHeightInBlocks = screenSize.height / BLOCK_SIZE;
     }
 
     private void generateMap() {
@@ -45,38 +54,41 @@ public class MinePanel extends JPanel implements KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int cameraSize = 8; // 8x8 tiles = 800x800px
-        int startX = playerX - cameraSize / 2;
-        int startY = playerY - cameraSize / 2;
+        int startX = playerX - cameraWidthInBlocks / 2;
+        int startY = playerY - cameraHeightInBlocks / 2;
 
-        for (int x = 0; x < cameraSize; x++) {
-            for (int y = 0; y < cameraSize; y++) {
+        for (int x = 0; x < cameraWidthInBlocks; x++) {
+            for (int y = 0; y < cameraHeightInBlocks; y++) {
                 int mapX = startX + x;
                 int mapY = startY + y;
 
                 if (mapX >= 0 && mapX < MAP_WIDTH && mapY >= 0 && mapY < MAP_HEIGHT) {
-                    map[mapX][mapY].draw(g, x * BlockSize, y * BlockSize, BlockSize);
+                    map[mapX][mapY].draw(g, x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE);
                 }
             }
         }
-        for (int i = 0; i < map.length; i++) {
 
-        }
+        // Postava uprostřed obrazovky
+        int playerScreenX = (cameraWidthInBlocks / 2) * BLOCK_SIZE;
+        int playerScreenY = (cameraHeightInBlocks / 2) * BLOCK_SIZE;
 
-        // Player rectangle (center)
         g.setColor(Color.RED);
-        g.fillRect((cameraSize / 2) * BlockSize, (cameraSize / 2) * BlockSize, BlockSize, BlockSize);
+        g.fillRect(playerScreenX, playerScreenY, BLOCK_SIZE, BLOCK_SIZE);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
+        int dx = 0, dy = 0;
+
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W, KeyEvent.VK_UP -> move(0, -100);
-            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> move(0, 100);
-            case KeyEvent.VK_A, KeyEvent.VK_LEFT -> move(-100, 0);
-            case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> move(100, 0);
+            case KeyEvent.VK_W, KeyEvent.VK_UP -> dy = -1;
+            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> dy = 1;
+            case KeyEvent.VK_A, KeyEvent.VK_LEFT -> dx = -1;
+            case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> dx = 1;
             case KeyEvent.VK_SPACE -> mineBlock();
         }
+
+        move(dx, dy);
         repaint();
     }
 
@@ -94,6 +106,7 @@ public class MinePanel extends JPanel implements KeyListener {
         Block current = map[playerX][playerY];
         if (!current.isMined()) {
             current.mine();
+            System.out.println("vytezeno" + player.getBackpack().size());
             BlockType type = current.getType();
             if (type != BlockType.DIRT) {
                 try {
@@ -104,12 +117,12 @@ public class MinePanel extends JPanel implements KeyListener {
                         case DIAMOND -> new Diamond();
                         default -> null;
                     };
-                    if (ore != null){
-                        if (player.getBackPackSize() < player.getBackpack().size()){
+                    if (ore != null) {
+                        if (player.getBackPackSize() < player.getBackpack().size()) {
                             player.addOre(ore);
-                        }else {
+                        } else {
                             JOptionPane.showMessageDialog(null,
-                                    "Your back pack is full!");
+                                    "Your backpack is full!");
                         }
                     }
 
