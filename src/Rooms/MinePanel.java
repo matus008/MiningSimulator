@@ -1,8 +1,6 @@
 package Rooms;
 
-import BlockP.Block;
-import BlockP.BlockGenerator;
-import BlockP.BlockType;
+import BlockP.*;
 import Player.Player;
 import BlockP.Valuables.*;
 
@@ -19,11 +17,14 @@ public class MinePanel extends JPanel implements KeyListener {
     private Block[][] map;
     private Player player;
 
-    // Pozice hráče na mapě
+
     private int playerX = 50;
     private int playerY = 50;
 
-    // Kamera (počet bloků, ne pixelů)
+    private int mineX = 0;
+    private int mineY = -1;
+
+
     private int cameraWidthInBlocks;
     private int cameraHeightInBlocks;
 
@@ -36,7 +37,7 @@ public class MinePanel extends JPanel implements KeyListener {
         setFocusable(true);
         addKeyListener(this);
 
-        // Dynamicky spočítat kolik bloků se vejde na obrazovku
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         cameraWidthInBlocks = screenSize.width / BLOCK_SIZE;
         cameraHeightInBlocks = screenSize.height / BLOCK_SIZE;
@@ -48,6 +49,12 @@ public class MinePanel extends JPanel implements KeyListener {
                 map[x][y] = BlockGenerator.generateRandomBlock();
             }
         }
+        int startX = MAP_WIDTH / 2;
+        int startY = MAP_HEIGHT / 2;
+        map[startX][startY] = new Block(BlockType.START);
+        playerX = startX;
+        playerY = startY;
+
     }
 
     @Override
@@ -68,27 +75,25 @@ public class MinePanel extends JPanel implements KeyListener {
             }
         }
 
-        // Postava uprostřed obrazovky
+
         int playerScreenX = (cameraWidthInBlocks / 2) * BLOCK_SIZE;
         int playerScreenY = (cameraHeightInBlocks / 2) * BLOCK_SIZE;
+        player.getMiner().draw(g, playerScreenX, playerScreenY);
 
-        g.setColor(Color.RED);
-        g.fillRect(playerScreenX, playerScreenY, BLOCK_SIZE, BLOCK_SIZE);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        int dx = 0, dy = 0;
-
+        int lx = 0;
+        int ly = 0;
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W, KeyEvent.VK_UP -> dy = -1;
-            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> dy = 1;
-            case KeyEvent.VK_A, KeyEvent.VK_LEFT -> dx = -1;
-            case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> dx = 1;
+            case KeyEvent.VK_W, KeyEvent.VK_UP -> { ly = -1; mineX = 0; mineY = -1; }
+            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> { ly = 1; mineX = 0; mineY = 1; }
+            case KeyEvent.VK_A, KeyEvent.VK_LEFT -> { lx = -1; mineX = -1; mineY = 0; }
+            case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { lx = 1; mineX = 1; mineY = 0; }
             case KeyEvent.VK_SPACE -> mineBlock();
         }
-
-        move(dx, dy);
+        move(lx, ly);
         repaint();
     }
 
@@ -97,38 +102,97 @@ public class MinePanel extends JPanel implements KeyListener {
         int newY = playerY + dy;
 
         if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT) {
-            playerX = newX;
-            playerY = newY;
+            Block targetBlock = map[newX][newY];
+            BlockType targetType = targetBlock.getType();
+            BlockType currentType = map[playerX][playerY].getType();
+
+            boolean canMove = false;
+
+            // noirmalni – emptyblock
+            if ((dy == 0 ) && (targetType == BlockType.EMPTY || targetType == BlockType.START)) {
+                canMove = true;
+            }
+
+            // nahoru a dolu muze jen po žebříku
+            if ((dy != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER)) {
+                canMove = true;
+            }
+
+            // pohyb do strany plus vystup a vstyp na zebrik
+            if ((dx != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER || targetType == BlockType.EMPTY)) {
+                canMove = true;
+            }
+
+            //  true pokud uzes  do strany nebo dolů:
+            if (canMove) {
+                playerX = newX;
+                playerY = newY;
+                repaint();
+
+                if (dx != 0 && dy == 0) {
+                    fallIfNoGround();
+                }
+            }
         }
     }
 
-    private void mineBlock() {
-        Block current = map[playerX][playerY];
-        if (!current.isMined()) {
-            current.mine();
-            System.out.println("vytezeno" + player.getBackpack().size());
-            BlockType type = current.getType();
-            if (type != BlockType.DIRT) {
-                try {
-                    Ores ore = switch (type) {
-                        case COAL -> new Coal();
-                        case SILVER -> new Silver();
-                        case GOLD -> new Gold();
-                        case DIAMOND -> new Diamond();
-                        default -> null;
-                    };
-                    if (ore != null) {
-                        if (player.getBackPackSize() < player.getBackpack().size()) {
-                            player.addOre(ore);
-                        } else {
-                            JOptionPane.showMessageDialog(null,
-                                    "Your backpack is full!");
-                        }
-                    }
+    // metoda pomoci AI
+    private void fallIfNoGround() {
+        Timer fallTimer = new Timer(50, null);
+        fallTimer.addActionListener(e -> {
+            int belowY = playerY + 1;
 
-                } catch (Exception ignored) {}
+            if (belowY >= MAP_HEIGHT) {
+                ((Timer) e.getSource()).stop();
+                return;
+            }
+
+            Block below = map[playerX][belowY];
+            BlockType belowType = below.getType();
+
+            if (belowType == BlockType.EMPTY || belowType == BlockType.LADDER) {
+                playerY++;
+                repaint();
+            } else {
+                ((Timer) e.getSource()).stop();
+            }
+        });
+        fallTimer.start();
+    }
+
+    private void mineBlock() {
+        int targetX = playerX + mineX;
+        int targetY = playerY + mineY;
+
+        if (targetX >= 0 && targetX < MAP_WIDTH && targetY >= 0 && targetY < MAP_HEIGHT) {
+            Block current = map[targetX][targetY];
+            if (!current.isMined()) {
+                current.mine();
+                map[targetX][targetY] = new EmptyBlock();
+                System.out.println("vytezeno " + player.getBackpack().size());
+                BlockType type = current.getType();
+                if (type != BlockType.DIRT) {
+                    try {
+                        Ores ore = switch (type) {
+                            case COAL -> new Coal();
+                            case SILVER -> new Silver();
+                            case GOLD -> new Gold();
+                            case DIAMOND -> new Diamond();
+                            default -> null;
+                        };
+                        if (ore != null) {
+                            if (player.getBackPackSize() > player.getBackpack().size()) {
+                                player.addOre(ore);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Your backpack is full!");
+                            }
+                        }
+                    } catch (Exception ignored) {}
+                }
             }
         }
+
+        repaint();
     }
 
     @Override public void keyTyped(KeyEvent e) {}

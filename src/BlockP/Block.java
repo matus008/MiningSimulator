@@ -11,8 +11,10 @@ public class Block {
     private static final Image coalImg = new ImageIcon("src/Textures/coal.png").getImage();
     private static final Image goldImg = new ImageIcon("src/Textures/gold.png").getImage();
     private static final Image diamondImg = new ImageIcon("src/Textures/diamond.png").getImage();
-    private static final Image emptyImg = new ImageIcon("src/Textures/dirt.png").getImage();
+    private static final Image emptyImg = new ImageIcon("src/Textures/empty.png").getImage();
     private static final Image silverImg = new ImageIcon("src/Textures/silver.png").getImage();
+    private static final Image ladderImg = new ImageIcon("src/Textures/ladder.png").getImage();
+    private static final Image startImg = new ImageIcon("src/Textures/start.png").getImage();
 
     public Block(BlockType type) {
         this.type = type;
@@ -21,11 +23,13 @@ public class Block {
 
     public void draw(Graphics g, int x, int y, int tileSize) {
         Image img = switch (type) {
-            case DIRT ->  dirtImg;
+            case DIRT -> dirtImg;
             case COAL -> coalImg;
             case GOLD -> goldImg;
             case DIAMOND -> diamondImg;
             case SILVER -> silverImg;
+            case LADDER -> ladderImg;
+            case START -> startImg;
             default -> emptyImg;
         };
         g.drawImage(img, x, y, tileSize, tileSize, null);
@@ -42,4 +46,6 @@ public class Block {
     public boolean isMined() {
         return mined;
     }
+
+
 }

@@ -7,15 +7,23 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class Player {
+    private final Miner miner;
     private ArrayList<Ores> backpack;
     private int balance;
     private int PUpgradeCounter;
-    private int backPackSize = 35;
+    private int backPackSize = 10;
 
     public Player() {
         this.backpack = new ArrayList<>();
         this.balance = 500;
         this.PUpgradeCounter = 0;
+
+        // start pozice miner (50, 50)
+        this.miner = new Miner(50, 50);
+    }
+
+    public Miner getMiner() {
+        return miner;
     }
 
     public void addOre(Ores ore) {
@@ -31,7 +39,6 @@ public class Player {
         backpack.clear();
         JOptionPane.showMessageDialog(null,
                 "You sold all ores for " + totalValue + " gold!");
-
     }
 
     public int getBalance() {
@@ -41,10 +48,12 @@ public class Player {
     public void setBalance(int balance) {
         this.balance = balance;
     }
+
     public void reduceBalance(int amount) {
         balance -= amount;
     }
-    public  void addBalance(int amount){
+
+    public void addBalance(int amount) {
         balance += amount;
     }
 
@@ -59,13 +68,12 @@ public class Player {
     public ArrayList<Ores> getBackpack() {
         return backpack;
     }
-    public void PlusUpgrade(Item item){
-        if(item.getName().equalsIgnoreCase("BackPackUpgrade")){
+
+    public void PlusUpgrade(Item item) {
+        if (item.getName().equalsIgnoreCase("BackPackUpgrade")) {
             backPackSize += 5;
-        }else if (item.getName().equalsIgnoreCase("PickAxeUpgrade")){
+        } else if (item.getName().equalsIgnoreCase("PickAxeUpgrade")) {
             PUpgradeCounter += 1;
         }
-
     }
-
 }

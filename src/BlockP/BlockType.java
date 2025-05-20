@@ -1,5 +1,5 @@
 package BlockP;
 
 public enum BlockType {
-    EMPTY, DIRT, COAL, SILVER, GOLD, DIAMOND
+    EMPTY, DIRT, COAL, SILVER, GOLD, DIAMOND, LADDER, START
 }

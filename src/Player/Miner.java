@@ -14,18 +14,18 @@ public class Miner {
         this.x = startX;
         this.y = startY;
         try {
-            texture = ImageIO.read(getClass().getResource(""));
+            texture = ImageIO.read(getClass().getResource("/Textures/miner.png"));
         } catch (IOException | IllegalArgumentException e) {
             System.out.println("Miner texture failed: " + e.getMessage());
         }
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, int drawX, int drawY) {
         if (texture != null) {
-            g.drawImage(texture, x, y, 64, 64, null);
+            g.drawImage(texture, drawX, drawY, 100, 100, null);
         } else {
             g.setColor(Color.RED);
-            g.fillRect(x, y, 64, 64);
+            g.fillRect(drawX, drawY, 100, 100);
         }
     }
 
