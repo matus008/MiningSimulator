@@ -12,6 +12,7 @@ public class Player {
     private int balance;
     private int PUpgradeCounter;
     private int backPackSize = 10;
+    private int ladderCount = 0;
 
     public Player() {
         this.backpack = new ArrayList<>();
@@ -74,6 +75,20 @@ public class Player {
             backPackSize += 5;
         } else if (item.getName().equalsIgnoreCase("PickAxeUpgrade")) {
             PUpgradeCounter += 1;
+        }
+    }
+
+    public int getLadderCount() {
+        return ladderCount;
+    }
+
+    public void addLadders(int amount) {
+        ladderCount += amount;
+    }
+
+    public void useLadder() {
+        if (ladderCount > 0) {
+            ladderCount--;
         }
     }
 }

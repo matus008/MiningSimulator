@@ -26,7 +26,7 @@ public class Shop extends JFrame {
         upgrades.add(new BackpackUpgrade(300, "BackpackUpgrade"));
         upgrades.add(new Column(50, "Column"));
         upgrades.add(new Dynamite(100, "Dynamite"));
-        upgrades.add(new Laddre(75, "Ladder"));
+        upgrades.add(new Ladder(75, "Ladder"));
         upgrades.add(new PicxakeUpgrade(500, "PickaxeUpgrade"));
     }
 
@@ -74,12 +74,8 @@ public class Shop extends JFrame {
 
     private void handlePurchase(Item item) {
         int quantity = 1;
-        //mozna jeste pridat LIGHTUPGRADE podle casu
-        if (item instanceof PicxakeUpgrade || item instanceof BackpackUpgrade){
-            player.PlusUpgrade(item);
-        }
 
-        if (item instanceof Column || item instanceof Dynamite || item instanceof Laddre) {
+        if (item instanceof Column || item instanceof Dynamite || item instanceof Ladder) {
             String input = JOptionPane.showInputDialog(null,
                     "How many units would you like to buy? (default 1):",
                     "Purchase Quantity",
@@ -107,6 +103,7 @@ public class Shop extends JFrame {
             }
         }
 
+        // Vždy vytvoříme a provedeme příkaz
         Command buyCommand = new BuyItem(this, item, quantity, player);
         buyCommand.execute();
     }

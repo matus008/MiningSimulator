@@ -28,6 +28,18 @@ public class MinePanel extends JPanel implements KeyListener {
     private int cameraWidthInBlocks;
     private int cameraHeightInBlocks;
 
+    private boolean canMine;
+
+    // veci souvisejici s timto neni ode mne ale z internetu
+    private String statusMessage = "";
+    private long messageTimestamp = 0;
+    private static final int MESSAGE_DURATION_MS = 3000;
+    private void showMessage(String msg) {
+        statusMessage = msg;
+        messageTimestamp = System.currentTimeMillis();
+        repaint();
+    }
+
     public MinePanel(Player player) {
         this.player = player;
         this.map = new Block[MAP_WIDTH][MAP_HEIGHT];
@@ -80,6 +92,17 @@ public class MinePanel extends JPanel implements KeyListener {
         int playerScreenY = (cameraHeightInBlocks / 2) * BLOCK_SIZE;
         player.getMiner().draw(g, playerScreenX, playerScreenY);
 
+        if (!statusMessage.isEmpty() &&
+                System.currentTimeMillis() - messageTimestamp < MESSAGE_DURATION_MS) {
+
+            g.setColor(new Color(0, 0, 0, 170)); // semi-transparent black
+            g.fillRect(0, getHeight() - 40, getWidth(), 40); // bottom bar
+
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Arial", Font.BOLD, 16));
+            g.drawString(statusMessage, 20, getHeight() - 15);
+        }
+
     }
 
     @Override
@@ -92,6 +115,7 @@ public class MinePanel extends JPanel implements KeyListener {
             case KeyEvent.VK_A, KeyEvent.VK_LEFT -> { lx = -1; mineX = -1; mineY = 0; }
             case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { lx = 1; mineX = 1; mineY = 0; }
             case KeyEvent.VK_SPACE -> mineBlock();
+            case KeyEvent.VK_E -> placeLadder();
         }
         move(lx, ly);
         repaint();
@@ -109,7 +133,7 @@ public class MinePanel extends JPanel implements KeyListener {
             boolean canMove = false;
 
             // noirmalni – emptyblock
-            if ((dy == 0 ) && (targetType == BlockType.EMPTY || targetType == BlockType.START)) {
+            if ((dy > 0 ) && (targetType == BlockType.EMPTY || targetType == BlockType.START)) {
                 canMove = true;
             }
 
@@ -159,35 +183,78 @@ public class MinePanel extends JPanel implements KeyListener {
         });
         fallTimer.start();
     }
+    private void placeLadder() {
+        int targetX = playerX + mineX;
+        int targetY = playerY + mineY;
+
+        if (targetX < 0 || targetX >= MAP_WIDTH || targetY < 0 || targetY >= MAP_HEIGHT) {
+            return; // mimo mapu
+        }
+
+        Block target = map[targetX][targetY];
+
+        if (target.getType() != BlockType.EMPTY) {
+            System.out.println("Nelze položit žebřík – blok není prázdný.");
+            return;
+        }
+
+        if (player.getLadderCount() <= 0) {
+            showMessage("You dont have any ladders left king!");
+        }else  {
+            map[targetX][targetY] = new Block(BlockType.LADDER);
+        player.useLadder();
+        repaint();
+        System.out.println("Žebřík položen na: " + targetX + "," + targetY);
+    }
+    }
 
     private void mineBlock() {
+        canMine = false;
         int targetX = playerX + mineX;
         int targetY = playerY + mineY;
 
         if (targetX >= 0 && targetX < MAP_WIDTH && targetY >= 0 && targetY < MAP_HEIGHT) {
             Block current = map[targetX][targetY];
             if (!current.isMined()) {
-                current.mine();
-                map[targetX][targetY] = new EmptyBlock();
-                System.out.println("vytezeno " + player.getBackpack().size());
                 BlockType type = current.getType();
-                if (type != BlockType.DIRT) {
-                    try {
-                        Ores ore = switch (type) {
-                            case COAL -> new Coal();
-                            case SILVER -> new Silver();
-                            case GOLD -> new Gold();
-                            case DIAMOND -> new Diamond();
-                            default -> null;
-                        };
-                        if (ore != null) {
-                            if (player.getBackPackSize() > player.getBackpack().size()) {
-                                player.addOre(ore);
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Your backpack is full!");
+                int requiredUpgrades = switch (type) {
+                    case SILVER -> 2;
+                    case GOLD -> 3;
+                    case DIAMOND -> 5;
+                    default -> 0; // Coal, Dirt, etc.
+                };
+
+                if (player.getPUpgradeCounter() < requiredUpgrades) {
+                    showMessage("You need " + requiredUpgrades + " Pickaxe Upgrades to mine " + type + "!");
+                    canMine = false;
+                }else {
+                    canMine = true;
+                }
+                if (canMine) {
+                    current.mine();
+                    map[targetX][targetY] = new EmptyBlock();
+                    System.out.println("vytezeno " + player.getBackpack().size());
+                }
+                if (type != BlockType.DIRT  ) {
+
+                        try {
+                            Ores ore = switch (type) {
+                                case COAL -> new Coal();
+                                case SILVER -> new Silver();
+                                case GOLD -> new Gold();
+                                case DIAMOND -> new Diamond();
+                                default -> null;
+                            };
+                            if (ore != null) {
+                                if (player.getBackPackSize() > player.getBackpack().size()) {
+                                    player.addOre(ore);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Your backpack is full!");
+                                }
                             }
+                        } catch (Exception ignored) {
                         }
-                    } catch (Exception ignored) {}
+
                 }
             }
         }
