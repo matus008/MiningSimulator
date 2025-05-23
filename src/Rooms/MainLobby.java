@@ -19,10 +19,13 @@ public class MainLobby extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         // nacteni obrazku do pozadi
-        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/Textures/MiningSimulator - MainLobby.jpg"));
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/Textures/MiningSimulator - MainLobby.png"));
         JLabel backgroundLabel = new JLabel(backgroundImage);
         backgroundLabel.setLayout(new BorderLayout());
 
+
+
+        //TODO: prendat PanelVy do tridy aby to bylo prehlednejsi
         JPanel contentPanel = new JPanel() {
 
             @Override
@@ -42,8 +45,16 @@ public class MainLobby extends JFrame {
         add(title);
         //vytvoreni Mine buttonu pro presun do jine mistosti
         JButton mineButton = new JButton("MINE");
-        mineButton.setFont(new Font("Arial", Font.BOLD, 24));
-        mineButton.setBounds(screenSize.width / 4 - 75, screenSize.height / 2 - 50, 150, 100);
+        mineButton.setFont(new Font("Arial", Font.BOLD, 140));
+        mineButton.setForeground(new Color(89, 45, 0));
+        mineButton.setContentAreaFilled(false);
+        mineButton.setBorderPainted(false);
+        mineButton.setFocusPainted(false);
+        mineButton.setOpaque(false);
+
+        mineButton.setSize(400, 120);
+        mineButton.setLocation(228, 291);
+
         mineButton.addActionListener(e -> {
             new MineJFrame(player);
             dispose();
@@ -51,8 +62,16 @@ public class MainLobby extends JFrame {
         add(mineButton);
         //vytvoreni Shop buttonu pro presun do jine mistosti
         JButton shopButton = new JButton("SHOP");
-        shopButton.setFont(new Font("Arial", Font.BOLD, 24));
-        shopButton.setBounds(screenSize.width * 3 / 4 - 75, screenSize.height / 2 - 50, 150, 100);
+        shopButton.setFont(new Font("Arial", Font.BOLD, 130));
+        shopButton.setForeground(new Color(89, 45, 0));
+        shopButton.setContentAreaFilled(false);
+        shopButton.setBorderPainted(false);
+        shopButton.setFocusPainted(false);
+        shopButton.setOpaque(false);
+
+        shopButton.setSize(500, 120);
+        shopButton.setLocation(1131, 418);
+
         shopButton.addActionListener(e -> {
             new Shop(player);
             dispose();

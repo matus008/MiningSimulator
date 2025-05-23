@@ -31,13 +31,12 @@ public class BuyItem implements Command {
             //  Přidání položek podle typu
             if (item instanceof Ladder) {
                 player.addLadders(quantity);
-                System.out.println("DEBUG: Přidáno " + quantity + " žebříků");
             } else if (item instanceof PicxakeUpgrade || item instanceof BackpackUpgrade) {
                 player.PlusUpgrade(item);
             }
 
             JOptionPane.showMessageDialog(null,
-                    "You bought " + quantity + "x " + item.getName() + " for " + totalPrice + " gold!\nRemaining balance: " + player.getBalance());
+                    "You bought " + quantity + "x " + item.getName() + " for " + totalPrice + " gold! Remaining balance: " + player.getBalance());
         } else {
             JOptionPane.showMessageDialog(null,
                     "Not enough money! You need " + totalPrice + " gold, but you have only " + player.getBalance());

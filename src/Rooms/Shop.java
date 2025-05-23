@@ -73,21 +73,21 @@ public class Shop extends JFrame {
     }
 
     private void handlePurchase(Item item) {
-        int quantity = 1;
+        int quantity = 0;
 
         if (item instanceof Column || item instanceof Dynamite || item instanceof Ladder) {
             String input = JOptionPane.showInputDialog(null,
-                    "How many units would you like to buy? (default 1):",
+                    "How many units would you like to buy? (default 0):",
                     "Purchase Quantity",
                     JOptionPane.QUESTION_MESSAGE);
 
             if (input == null || input.trim().isEmpty()) {
-                input = "1";
+                input = "0";
             }
 
             try {
                 quantity = Integer.parseInt(input.trim());
-                if (quantity <= 0) {
+                if (quantity < 0) {
                     JOptionPane.showMessageDialog(null,
                             "Invalid quantity! Must be a positive number.",
                             "Input Error",
@@ -102,7 +102,6 @@ public class Shop extends JFrame {
                 return;
             }
         }
-
         // Vždy vytvoříme a provedeme příkaz
         Command buyCommand = new BuyItem(this, item, quantity, player);
         buyCommand.execute();

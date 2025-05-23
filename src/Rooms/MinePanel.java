@@ -142,23 +142,18 @@ public class MinePanel extends JPanel implements KeyListener {
             if (targetType == BlockType.START) {
                 canMove = true;
             }
-
             // Na EMPTY muze jen dolu, doleva, doprava
             if (targetType == BlockType.EMPTY && (dy >= 0 || dx != 0)) {
                 canMove = true;
             }
-
-
             // nahoru a dolu muze jen po žebříku
             if ((dy != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER)) {
                 canMove = true;
             }
-
             // pohyb do strany plus vystup a vstyp na zebrik
             if ((dx != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER || targetType == BlockType.EMPTY)) {
                 canMove = true;
             }
-
             //  true pokud uzes  do strany nebo dolů:
             if (canMove) {
                 playerX = newX;
