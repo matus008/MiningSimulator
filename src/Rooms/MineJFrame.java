@@ -14,18 +14,21 @@ public class MineJFrame extends JFrame {
         setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
         MinePanel panel = new MinePanel(player);
         panel.setPreferredSize(screenSize);
         setContentPane(panel);
         pack();
 
-
-        GraphicsEnvironment.getLocalGraphicsEnvironment()
-                .getDefaultScreenDevice()
-                .setFullScreenWindow(this);
+        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
 
         setVisible(true);
         panel.requestFocusInWindow();
-    }
+
+        // TODO: dodelat aby se zavrel MinePanel spolecna s Jframe asi nvm
+        if (!panel.canLeav()){
+            System.out.println("funguje");
+            getContentPane().remove(panel);
+            panel.removeAll();
+        }
+}
 }

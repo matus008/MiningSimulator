@@ -6,9 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainLobby extends JFrame {
+    Player player;
 
-    public MainLobby() {
-        Player player = new Player();
+    public MainLobby(Player player) {
+        this.player = player;
         setTitle("Main Lobby");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);

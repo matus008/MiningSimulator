@@ -63,7 +63,7 @@ public class Shop extends JFrame {
         JButton exitButton = new JButton("Exit Shop");
         exitButton.setFont(new Font("Arial", Font.BOLD, 24));
         exitButton.addActionListener(e -> {
-            Command exitCommand = new Exit(this);
+            Command exitCommand = new Exit(this, player);
             exitCommand.execute();
         });
         panel.add(exitButton);

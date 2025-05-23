@@ -12,7 +12,7 @@ public class Player {
     private int balance;
     private int PUpgradeCounter;
     private int backPackSize = 10;
-    private int ladderCount = 0;
+    private int ladderCount;
 
     public Player() {
         this.backpack = new ArrayList<>();
@@ -83,7 +83,9 @@ public class Player {
     }
 
     public void addLadders(int amount) {
-        ladderCount += amount;
+        System.out.println("zebrik byl pridan o tolikhle zebriku" + amount);
+        ladderCount = ladderCount + amount;
+        System.out.println(" momentalne ma zebriku " + getLadderCount());
     }
 
     public void useLadder() {

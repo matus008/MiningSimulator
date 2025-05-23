@@ -44,6 +44,7 @@ public class MinePanel extends JPanel implements KeyListener {
         this.player = player;
         this.map = new Block[MAP_WIDTH][MAP_HEIGHT];
 
+        System.out.println("hrac ma --> " + player.getLadderCount() + "ZEBRIKU");
         generateMap();
 
         setFocusable(true);
@@ -95,8 +96,8 @@ public class MinePanel extends JPanel implements KeyListener {
         if (!statusMessage.isEmpty() &&
                 System.currentTimeMillis() - messageTimestamp < MESSAGE_DURATION_MS) {
 
-            g.setColor(new Color(0, 0, 0, 170)); // semi-transparent black
-            g.fillRect(0, getHeight() - 40, getWidth(), 40); // bottom bar
+            g.setColor(new Color(0, 0, 0, 170));
+            g.fillRect(0, getHeight() - 40, getWidth(), 40);
 
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 16));
@@ -116,6 +117,7 @@ public class MinePanel extends JPanel implements KeyListener {
             case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { lx = 1; mineX = 1; mineY = 0; }
             case KeyEvent.VK_SPACE -> mineBlock();
             case KeyEvent.VK_E -> placeLadder();
+            case KeyEvent.VK_R -> checkReturnToLobby();
         }
         move(lx, ly);
         repaint();
@@ -124,6 +126,10 @@ public class MinePanel extends JPanel implements KeyListener {
     public void move(int dx, int dy) {
         int newX = playerX + dx;
         int newY = playerY + dy;
+        Block steppedOn = map[playerX][playerY];
+        if (steppedOn.getType() == BlockType.START) {
+            showMessage("You are on the start block. Press 'R' to return to the lobby.");
+        }
 
         if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT) {
             Block targetBlock = map[newX][newY];
@@ -132,10 +138,16 @@ public class MinePanel extends JPanel implements KeyListener {
 
             boolean canMove = false;
 
-            // noirmalni – emptyblock
-            if ((dy > 0 ) && (targetType == BlockType.EMPTY || targetType == BlockType.START)) {
+            // Volný pohyb na START ze všech směrů
+            if (targetType == BlockType.START) {
                 canMove = true;
             }
+
+            // Na EMPTY muze jen dolu, doleva, doprava
+            if (targetType == BlockType.EMPTY && (dy >= 0 || dx != 0)) {
+                canMove = true;
+            }
+
 
             // nahoru a dolu muze jen po žebříku
             if ((dy != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER)) {
@@ -171,10 +183,18 @@ public class MinePanel extends JPanel implements KeyListener {
                 return;
             }
 
+            Block current = map[playerX][playerY];
             Block below = map[playerX][belowY];
             BlockType belowType = below.getType();
+            BlockType currentType = current.getType();
 
-            if (belowType == BlockType.EMPTY || belowType == BlockType.LADDER) {
+            // nespadne pokud je na zebriku nebo je pod nim zebrik
+            if (currentType == BlockType.LADDER || belowType == BlockType.LADDER) {
+                ((Timer) e.getSource()).stop();
+                return;
+            }
+
+            if (belowType == BlockType.EMPTY) {
                 playerY++;
                 repaint();
             } else {
@@ -194,7 +214,7 @@ public class MinePanel extends JPanel implements KeyListener {
         Block target = map[targetX][targetY];
 
         if (target.getType() != BlockType.EMPTY) {
-            System.out.println("Nelze položit žebřík – blok není prázdný.");
+            showMessage("You can't place Ladder there.");
             return;
         }
 
@@ -206,6 +226,24 @@ public class MinePanel extends JPanel implements KeyListener {
         repaint();
         System.out.println("Žebřík položen na: " + targetX + "," + targetY);
     }
+    }
+    private void checkReturnToLobby() {
+        Block currentBlock = map[playerX][playerY];
+        if (currentBlock.getType() == BlockType.START) {
+            ReturnToLobby();
+        } else {
+            showMessage("You must stand on the start block to return.");
+        }
+    }
+    public void ReturnToLobby() {
+
+        new MainLobby(player);
+
+      canLeav();
+    }
+
+    public boolean canLeav() {
+        return true;
     }
 
     private void mineBlock() {
@@ -234,8 +272,7 @@ public class MinePanel extends JPanel implements KeyListener {
                     current.mine();
                     map[targetX][targetY] = new EmptyBlock();
                     System.out.println("vytezeno " + player.getBackpack().size());
-                }
-                if (type != BlockType.DIRT  ) {
+                    if (type != BlockType.DIRT  ) {
 
                         try {
                             Ores ore = switch (type) {
@@ -255,7 +292,9 @@ public class MinePanel extends JPanel implements KeyListener {
                         } catch (Exception ignored) {
                         }
 
+                    }
                 }
+
             }
         }
 
