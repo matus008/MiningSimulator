@@ -11,67 +11,141 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+
 public class Shop extends JFrame {
-    private ArrayList<Item> upgrades;
     private Player player;
+    private ArrayList<Item> upgrades;
 
     public Shop(Player player) {
+        this.upgrades = new ArrayList<>();
         this.player = player;
-        upgrades = new ArrayList<>();
-        initializeItems();
-        initializeGUI();
-    }
-
-    private void initializeItems() {
-        upgrades.add(new BackpackUpgrade(300, "BackpackUpgrade"));
-        upgrades.add(new Column(50, "Column"));
-        upgrades.add(new Dynamite(100, "Dynamite"));
-        upgrades.add(new Ladder(75, "Ladder"));
-        upgrades.add(new PicxakeUpgrade(500, "PickaxeUpgrade"));
-    }
-
-    private void initializeGUI() {
         setTitle("SHOP");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1, 10, 10));
-        panel.setBackground(Color.LIGHT_GRAY);
+        ImageIcon bgImage = new ImageIcon(getClass().getResource("/Textures/shop.png"));
+        ShopPanel backgroundPanel = new ShopPanel(bgImage);
+        setContentPane(backgroundPanel);
 
-        JLabel label = new JLabel("Welcome to the SHOP!", SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 36));
-        label.setForeground(Color.BLACK);
-        add(label, BorderLayout.NORTH);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int w = screen.width;
+        int h = screen.height;
 
-        for (Item item : upgrades) {
-            JButton button = new JButton(item.getPrize() + " gold");
-            button.setFont(new Font("Arial", Font.PLAIN, 24));
-            button.addActionListener(e -> handlePurchase(item));
-            panel.add(button);
-        }
+        initializeItems();
 
-        JButton sellButton = new JButton("Sell All Ores");
-        sellButton.setFont(new Font("Arial", Font.BOLD, 24));
+
+
+
+        JButton buyPickaxe = new JButton("");
+        buyPickaxe.setFont(new Font("Arial", Font.BOLD, 32));
+        buyPickaxe.setSize(400,50);
+        buyPickaxe.setLocation(758, 843);
+        buyPickaxe.setContentAreaFilled(false);
+        buyPickaxe.setBorderPainted(false);
+        buyPickaxe.setFocusPainted(false);
+        buyPickaxe.setOpaque(false);
+        buyPickaxe.addActionListener(e -> {
+
+            handlePurchase(upgrades.get(4));
+        });
+
+        JButton buyLadder= new JButton("");
+        buyLadder.setFont(new Font("Arial", Font.BOLD, 32));
+        buyLadder.setSize(400,50);
+        buyLadder.setLocation(165, 843);
+        buyLadder.setContentAreaFilled(false);
+        buyLadder.setBorderPainted(false);
+        buyLadder.setFocusPainted(false);
+        buyLadder.setOpaque(false);
+        buyLadder.addActionListener(e -> {
+
+            handlePurchase(upgrades.get(3));
+        });
+
+        JButton buyBackPAck = new JButton("");
+        buyBackPAck.setFont(new Font("Arial", Font.BOLD, 32));
+        buyBackPAck.setSize(400,50);
+        buyBackPAck.setLocation(165, 488);
+        buyBackPAck.setContentAreaFilled(false);
+        buyBackPAck.setBorderPainted(false);
+        buyBackPAck.setFocusPainted(false);
+        buyBackPAck.setOpaque(false);
+        buyBackPAck.addActionListener(e -> {
+
+            handlePurchase(upgrades.get(0));
+        });
+
+        JButton buyDynamite = new JButton("");
+        buyDynamite.setFont(new Font("Arial", Font.BOLD, 32));
+        buyDynamite.setSize(400,50);
+        buyDynamite.setLocation(1355, 488);
+        buyDynamite.setContentAreaFilled(false);
+        buyDynamite.setBorderPainted(false);
+        buyDynamite.setFocusPainted(false);
+        buyDynamite.setOpaque(false);
+        buyDynamite.addActionListener(e -> {
+
+            handlePurchase(upgrades.get(2));
+        });
+
+        JButton buyColum = new JButton("");
+        buyColum.setFont(new Font("Arial", Font.BOLD, 32));
+        buyColum.setSize(400,50);
+        buyColum.setLocation(758, 488);
+        buyColum.setContentAreaFilled(false);
+        buyColum.setBorderPainted(false);
+        buyColum.setFocusPainted(false);
+        buyColum.setOpaque(false);
+        buyColum.addActionListener(e -> {
+            // TODO: Show dialog with selectable item list
+            handlePurchase(upgrades.get(1));
+        });
+
+
+        JButton sellButton = new JButton("");
+        sellButton.setFont(new Font("", Font.BOLD, 32));
+        sellButton.setSize(740,90);
+        sellButton.setLocation(180, 950);
+        sellButton.setContentAreaFilled(false);
+        sellButton.setBorderPainted(false);
+        sellButton.setFocusPainted(false);
+        sellButton.setOpaque(false);
         sellButton.addActionListener(e -> {
-            Command sellCommand = new SellItem(player);
-            sellCommand.execute();
+            Command sell = new SellItem(player);
+            sell.execute();
         });
-        panel.add(sellButton);
 
-        JButton exitButton = new JButton("Exit Shop");
-        exitButton.setFont(new Font("Arial", Font.BOLD, 24));
+        JButton exitButton = new JButton("");
+        exitButton.setFont(new Font("", Font.BOLD, 32));
+        exitButton.setSize(740,90);
+        exitButton.setLocation(1000, 950);
+        exitButton.setContentAreaFilled(false);
+        exitButton.setBorderPainted(false);
+        exitButton.setFocusPainted(false);
+        exitButton.setOpaque(false);
         exitButton.addActionListener(e -> {
-            Command exitCommand = new Exit(this, player);
-            exitCommand.execute();
+            Command exit = new Exit(this, player);
+            exit.execute();
         });
-        panel.add(exitButton);
+        backgroundPanel.add(buyPickaxe);
+        backgroundPanel.add(buyLadder);
+        backgroundPanel.add(buyColum);
+        backgroundPanel.add(buyBackPAck);
+        backgroundPanel.add(buyDynamite);
+        backgroundPanel.add(sellButton);
+        backgroundPanel.add(exitButton);
 
-        add(panel, BorderLayout.CENTER);
         setVisible(true);
     }
 
+    public void initializeItems() {
+        upgrades.add(new BackpackUpgrade(300, "BackpackUpgrade"));
+        upgrades.add(new Column(50, "Column"));
+        upgrades.add(new Dynamite(100, "Dynamite"));
+        upgrades.add(new Ladder(25, "Ladder"));
+        upgrades.add(new PicxakeUpgrade(500, "PickaxeUpgrade"));
+    }
     private void handlePurchase(Item item) {
         int quantity = 0;
 
@@ -101,8 +175,10 @@ public class Shop extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
+        }else {
+            quantity = 1;
         }
-        // Vždy vytvoříme a provedeme příkaz
+
         Command buyCommand = new BuyItem(this, item, quantity, player);
         buyCommand.execute();
     }

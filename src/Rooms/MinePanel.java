@@ -30,6 +30,8 @@ public class MinePanel extends JPanel implements KeyListener {
 
     private boolean canMine;
 
+    private JFrame parentFrame;
+
     // veci souvisejici s timto neni ode mne ale z internetu
     private String statusMessage = "";
     private long messageTimestamp = 0;
@@ -40,7 +42,7 @@ public class MinePanel extends JPanel implements KeyListener {
         repaint();
     }
 
-    public MinePanel(Player player) {
+    public MinePanel(Player player, JFrame parentFrame) {
         this.player = player;
         this.map = new Block[MAP_WIDTH][MAP_HEIGHT];
 
@@ -54,6 +56,8 @@ public class MinePanel extends JPanel implements KeyListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         cameraWidthInBlocks = screenSize.width / BLOCK_SIZE;
         cameraHeightInBlocks = screenSize.height / BLOCK_SIZE;
+
+        this.parentFrame = parentFrame;
     }
 
     private void generateMap() {
@@ -233,13 +237,11 @@ public class MinePanel extends JPanel implements KeyListener {
     public void ReturnToLobby() {
 
         new MainLobby(player);
+        parentFrame.dispose();
 
-      canLeav();
+
     }
 
-    public boolean canLeav() {
-        return true;
-    }
 
     private void mineBlock() {
         canMine = false;
@@ -251,9 +253,9 @@ public class MinePanel extends JPanel implements KeyListener {
             if (!current.isMined()) {
                 BlockType type = current.getType();
                 int requiredUpgrades = switch (type) {
-                    case SILVER -> 2;
+                    case SILVER -> 1;
                     case GOLD -> 3;
-                    case DIAMOND -> 5;
+                    case DIAMOND -> 6;
                     default -> 0; // Coal, Dirt, etc.
                 };
 

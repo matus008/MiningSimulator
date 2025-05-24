@@ -28,7 +28,7 @@ public class BuyItem implements Command {
         if (player.getBalance() >= totalPrice) {
             player.reduceBalance(totalPrice);
 
-            //  Přidání položek podle typu
+            //  pridani polozek podel typu
             if (item instanceof Ladder) {
                 player.addLadders(quantity);
             } else if (item instanceof PicxakeUpgrade || item instanceof BackpackUpgrade) {
@@ -36,7 +36,7 @@ public class BuyItem implements Command {
             }
 
             JOptionPane.showMessageDialog(null,
-                    "You bought " + quantity + "x " + item.getName() + " for " + totalPrice + " gold! Remaining balance: " + player.getBalance());
+                    "You bought " + quantity + "x " + item.getName() + " for " + totalPrice + " gold.; Remaining balance: " + player.getBalance());
         } else {
             JOptionPane.showMessageDialog(null,
                     "Not enough money! You need " + totalPrice + " gold, but you have only " + player.getBalance());

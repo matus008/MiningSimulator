@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Miner {
-    private int x, y;
+    private int x;
+    private int y;
     private int speed = 5;
     private BufferedImage texture;
 
