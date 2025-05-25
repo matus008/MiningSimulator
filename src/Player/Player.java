@@ -19,7 +19,7 @@ public class Player {
         this.balance = 500;
         this.PUpgradeCounter = 0;
 
-        // start pozice miner (50, 50)
+        // start pozice miner
         this.miner = new Miner(50, 50);
     }
 

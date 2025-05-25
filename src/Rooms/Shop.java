@@ -9,6 +9,10 @@ import Player.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -98,7 +102,6 @@ public class Shop extends JFrame {
         buyColum.setFocusPainted(false);
         buyColum.setOpaque(false);
         buyColum.addActionListener(e -> {
-            // TODO: Show dialog with selectable item list
             handlePurchase(upgrades.get(1));
         });
 
@@ -139,13 +142,47 @@ public class Shop extends JFrame {
         setVisible(true);
     }
 
-    public void initializeItems() {
-        upgrades.add(new BackpackUpgrade(300, "BackpackUpgrade"));
-        upgrades.add(new Column(50, "Column"));
-        upgrades.add(new Dynamite(100, "Dynamite"));
-        upgrades.add(new Ladder(25, "Ladder"));
-        upgrades.add(new PicxakeUpgrade(500, "PickaxeUpgrade"));
+    private void initializeItems() {
+        upgrades = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("src\\shopFile"))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+
+                if (parts.length == 2) {
+                    String name = parts[0].trim();
+                    int price = Integer.parseInt(parts[1].trim());
+
+                    Item item = null;
+
+                    if (name.equals("BackpackUpgrade")) {
+                        item = new BackpackUpgrade(price, name);
+                    } else if (name.equals("Column")) {
+                        item = new Column(price, name);
+                    } else if (name.equals("Dynamite")) {
+                        item = new Dynamite(price, name);
+                    } else if (name.equals("Ladder")) {
+                        item = new Ladder(price, name);
+                    } else if (name.equals("PickaxeUpgrade")) {
+                        item = new PicxakeUpgrade(price, name);
+                    }
+
+                    if (item != null) {
+                        upgrades.add(item);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Chyba při načítání položek shopu: " + e.getMessage());
+        }
     }
+
+    public ArrayList<Item> getUpgrades() {
+        return upgrades;
+    }
+
     private void handlePurchase(Item item) {
         int quantity = 0;
 

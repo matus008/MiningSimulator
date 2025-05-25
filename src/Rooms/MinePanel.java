@@ -96,7 +96,7 @@ public class MinePanel extends JPanel implements KeyListener {
         int playerScreenX = (cameraWidthInBlocks / 2) * BLOCK_SIZE;
         int playerScreenY = (cameraHeightInBlocks / 2) * BLOCK_SIZE;
         player.getMiner().draw(g, playerScreenX, playerScreenY);
-
+        // toto mi vymislel hodny chlapec ChatGpt
         if (!statusMessage.isEmpty() &&
                 System.currentTimeMillis() - messageTimestamp < MESSAGE_DURATION_MS) {
 
@@ -142,7 +142,7 @@ public class MinePanel extends JPanel implements KeyListener {
 
             boolean canMove = false;
 
-            // Volný pohyb na START ze všech směrů
+            // Volný pohyb na START
             if (targetType == BlockType.START) {
                 canMove = true;
             }
@@ -150,13 +150,20 @@ public class MinePanel extends JPanel implements KeyListener {
             if (targetType == BlockType.EMPTY && (dy >= 0 || dx != 0)) {
                 canMove = true;
             }
-            // nahoru a dolu muze jen po žebříku
-            if ((dy != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER)) {
-                canMove = true;
+            // pohyb nahoru/dolu
+            if (dy != 0) {
+                if (((currentType == BlockType.LADDER ) &&
+                        (targetType == BlockType.LADDER || targetType == BlockType.EMPTY)) || ((currentType == BlockType.EMPTY ) &&
+                        (targetType == BlockType.LADDER)) ) {
+                    canMove = true;
+                }
             }
-            // pohyb do strany plus vystup a vstyp na zebrik
-            if ((dx != 0) && (targetType == BlockType.LADDER || currentType == BlockType.LADDER || targetType == BlockType.EMPTY)) {
-                canMove = true;
+
+            // pohyb do stran
+            if (dx != 0) {
+                if (targetType == BlockType.EMPTY || targetType == BlockType.LADDER) {
+                    canMove = true;
+                }
             }
             //  true pokud uzes  do strany nebo dolů:
             if (canMove) {
@@ -203,8 +210,8 @@ public class MinePanel extends JPanel implements KeyListener {
         fallTimer.start();
     }
     private void placeLadder() {
-        int targetX = playerX + mineX;
-        int targetY = playerY + mineY;
+        int targetX = playerX;
+        int targetY = playerY;
 
         if (targetX < 0 || targetX >= MAP_WIDTH || targetY < 0 || targetY >= MAP_HEIGHT) {
             return; // mimo mapu
@@ -223,7 +230,6 @@ public class MinePanel extends JPanel implements KeyListener {
             map[targetX][targetY] = new Block(BlockType.LADDER);
         player.useLadder();
         repaint();
-        System.out.println("Žebřík položen na: " + targetX + "," + targetY);
     }
     }
     private void checkReturnToLobby() {
@@ -296,6 +302,22 @@ public class MinePanel extends JPanel implements KeyListener {
         }
 
         repaint();
+    }
+
+    public Block[][] getMap() {
+        return map;
+    }
+    public int getPlayerX() {
+        return playerX;
+    }
+    public int getPlayerY() {
+        return playerY;
+    }
+    public int getMineX() {
+        return mineX;
+    }
+    public int getMineY() {
+        return mineY;
     }
 
     @Override public void keyTyped(KeyEvent e) {}
