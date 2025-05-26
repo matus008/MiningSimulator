@@ -1,12 +1,14 @@
 package BlockP;
 
+import BlockP.Other.StoneBlock;
+
 import java.util.Random;
 
 public class BlockGenerator {
     private static final Random random = new Random();
 
     public static Block generateRandomBlock() {
-        int chance = random.nextInt(100);
+        int chance = random.nextInt(101);
         if (chance < 75){
             return new Block(BlockType.DIRT);
         }else if (chance < 83){
@@ -15,8 +17,10 @@ public class BlockGenerator {
             return new Block(BlockType.SILVER);
         }else  if (chance < 98){
             return new Block(BlockType.GOLD);
-        }else {
+        }else if (chance < 100){
             return new Block(BlockType.DIAMOND);
+        }else {
+            return new StoneBlock(BlockType.STONE);
         }
 
     }

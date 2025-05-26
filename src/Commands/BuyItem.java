@@ -1,11 +1,8 @@
 package Commands;
 
 import Player.Player;
-import ShopItems.BackpackUpgrade;
-import ShopItems.Item;
+import ShopItems.*;
 import Rooms.Shop;
-import ShopItems.Ladder;
-import ShopItems.PicxakeUpgrade;
 
 import javax.swing.*;
 
@@ -33,6 +30,8 @@ public class BuyItem implements Command {
                 player.addLadders(quantity);
             } else if (item instanceof PicxakeUpgrade || item instanceof BackpackUpgrade) {
                 player.PlusUpgrade(item);
+            }else if (item instanceof Column) {
+                player.addColumns(quantity);
             }
 
             JOptionPane.showMessageDialog(null,

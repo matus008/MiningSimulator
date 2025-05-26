@@ -1,5 +1,8 @@
-package BlockP;
+package BlockP.Other;
 
+
+import BlockP.Block;
+import BlockP.BlockType;
 
 public class LadderBlock extends Block {
 

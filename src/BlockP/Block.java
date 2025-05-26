@@ -15,6 +15,8 @@ public class Block {
     private static final Image silverImg = new ImageIcon("src/Textures/silver.png").getImage();
     private static final Image ladderImg = new ImageIcon("src/Textures/ladder.png").getImage();
     private static final Image startImg = new ImageIcon("src/Textures/start.png").getImage();
+    private static final Image stoneImg = new ImageIcon("src/Textures/stone.png").getImage();
+    private static final Image columnImg = new ImageIcon("src/Textures/column.png").getImage();
 
     public Block(BlockType type) {
         this.type = type;
@@ -30,6 +32,8 @@ public class Block {
             case SILVER -> silverImg;
             case LADDER -> ladderImg;
             case START -> startImg;
+            case STONE -> stoneImg;
+            case COLUMN -> columnImg;
             default -> emptyImg;
         };
         g.drawImage(img, x, y, tileSize, tileSize, null);

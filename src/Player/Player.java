@@ -13,6 +13,7 @@ public class Player {
     private int PUpgradeCounter;
     private int backPackSize = 10;
     private int ladderCount;
+    private int columnCount;
 
     public Player() {
         this.backpack = new ArrayList<>();
@@ -85,12 +86,23 @@ public class Player {
     public void addLadders(int amount) {
         System.out.println("zebrik byl pridan o tolikhle zebriku" + amount);
         ladderCount = ladderCount + amount;
-        System.out.println(" momentalne ma zebriku " + getLadderCount());
     }
 
     public void useLadder() {
         if (ladderCount > 0) {
             ladderCount--;
+        }
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
+    public void addColumns(int amount) {
+        columnCount = columnCount + amount;
+    }
+    public void useColumn() {
+        if (columnCount > 0) {
+            columnCount--;
         }
     }
 }

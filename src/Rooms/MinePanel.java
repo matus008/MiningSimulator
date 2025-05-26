@@ -1,6 +1,9 @@
 package Rooms;
 
 import BlockP.*;
+import BlockP.Other.ColumnBlock;
+import BlockP.Other.EmptyBlock;
+import BlockP.Other.StoneBlock;
 import Player.Player;
 import BlockP.Valuables.*;
 
@@ -122,6 +125,7 @@ public class MinePanel extends JPanel implements KeyListener {
             case KeyEvent.VK_SPACE -> mineBlock();
             case KeyEvent.VK_E -> placeLadder();
             case KeyEvent.VK_R -> checkReturnToLobby();
+            case KeyEvent.VK_C -> placeColumn();
         }
         move(lx, ly);
         repaint();
@@ -161,7 +165,7 @@ public class MinePanel extends JPanel implements KeyListener {
 
             // pohyb do stran
             if (dx != 0) {
-                if (targetType == BlockType.EMPTY || targetType == BlockType.LADDER) {
+                if (targetType == BlockType.EMPTY || targetType == BlockType.LADDER || targetType == BlockType.COLUMN) {
                     canMove = true;
                 }
             }
@@ -208,6 +212,52 @@ public class MinePanel extends JPanel implements KeyListener {
             }
         });
         fallTimer.start();
+    }
+
+    // DeepL metoda
+    private void stoneFallingCheck(int minedX, int minedY) {
+        Timer delay = new Timer(2000, null); // 2 sekundy
+        delay.addActionListener(e -> {
+            int aboveY = minedY - 1;
+            if (aboveY < 0) {
+                return;
+            }
+            if (map[minedX][minedY].getType() == BlockType.COLUMN) {
+                ((Timer) e.getSource()).stop();
+                System.out.println("Funguje zastaveni");
+            }
+
+            Block above = map[minedX][aboveY];
+            if (above.getType() == BlockType.STONE) {
+                Block below = map[minedX][minedY];
+                if (below.getType() == BlockType.EMPTY) {
+                    System.out.println("nezastavilo");
+                    map[minedX][aboveY] = new EmptyBlock();
+                    map[minedX][minedY] = new StoneBlock(BlockType.STONE);
+                    repaint();
+                }
+            }
+        });
+        delay.setRepeats(false);
+        delay.start();
+    }
+
+    private void placeColumn(){
+        int targetX = playerX;
+        int targetY = playerY;
+        Block targetBlock = map[targetX][targetY];
+        if (targetBlock.getType() != BlockType.EMPTY) {
+            showMessage("You can't place Ladder there.");
+            return;
+        }
+        if (player.getColumnCount() <= 0){
+            showMessage("You can't place column there king !!.");
+        }else {
+            map[targetX][targetY] = new ColumnBlock(BlockType.COLUMN);
+            player.useColumn();
+            repaint();
+        }
+
     }
     private void placeLadder() {
         int targetX = playerX;
@@ -268,6 +318,9 @@ public class MinePanel extends JPanel implements KeyListener {
                 if (player.getPUpgradeCounter() < requiredUpgrades) {
                     showMessage("You need " + requiredUpgrades + " Pickaxe Upgrades to mine " + type + "!");
                     canMine = false;
+                }else if (current.getType() == BlockType.STONE) {
+                    showMessage("You cannot mine this block!!");
+                    canMine = false;
                 }else {
                     canMine = true;
                 }
@@ -275,6 +328,7 @@ public class MinePanel extends JPanel implements KeyListener {
                     current.mine();
                     map[targetX][targetY] = new EmptyBlock();
                     System.out.println("vytezeno " + player.getBackpack().size());
+                    stoneFallingCheck(targetX, targetY);
                     if (type != BlockType.DIRT  ) {
 
                         try {
