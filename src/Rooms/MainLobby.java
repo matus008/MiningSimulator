@@ -4,10 +4,18 @@ import Player.Player;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * This class creates the Main Lobby window.
+ * From here, the player can enter the mine or go to the shop.
+ */
 public class MainLobby extends JFrame {
     Player player;
-
+    /**
+     * Builds the main lobby window with background and two buttons:
+     * one for entering the mine and one for entering the shop.
+     *
+     * @param player the current player using the game
+     */
     public MainLobby(Player player) {
         this.player = player;
         setTitle("Main Lobby");
@@ -17,17 +25,17 @@ public class MainLobby extends JFrame {
         setLayout(null);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
+        // Set background image using custom panel
         ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/Textures/MiningSimulator - MainLobby.jpg"));
         MainPanel contentPanel = new MainPanel(backgroundImage);
         setContentPane(contentPanel);
 
-        //Vytvori napis
+        // Title label
         JLabel title = new JLabel("Main Lobby", SwingConstants.CENTER);
         title.setFont(new Font("", Font.BOLD, 36));
         title.setBounds(screenSize.width / 2 - 200, 50, 400, 60);
         add(title);
-        //vytvoreni Mine buttonu pro presun do jine mistosti
+        // Mine button
         JButton mineButton = new JButton("MINE");
         mineButton.setFont(new Font("", Font.BOLD, 140));
         mineButton.setForeground(new Color(89, 45, 0));
@@ -44,7 +52,7 @@ public class MainLobby extends JFrame {
             dispose();
         });
         add(mineButton);
-        //vytvoreni Shop buttonu pro presun do jine mistosti
+        // Shop button
         JButton shopButton = new JButton("SHOP");
         shopButton.setFont(new Font("", Font.BOLD, 130));
         shopButton.setForeground(new Color(89, 45, 0));

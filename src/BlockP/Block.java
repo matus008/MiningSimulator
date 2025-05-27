@@ -2,7 +2,10 @@ package BlockP;
 
 import java.awt.*;
 import javax.swing.*;
-
+/**
+ * Represents a single block in the mine.
+ * Different types of blocks can have different textures and behaviors.
+ */
 public class Block {
     private BlockType type;
     private boolean mined;
@@ -17,13 +20,24 @@ public class Block {
     private static final Image startImg = new ImageIcon("src/Textures/start.png").getImage();
     private static final Image stoneImg = new ImageIcon("src/Textures/stone.png").getImage();
     private static final Image columnImg = new ImageIcon("src/Textures/column.png").getImage();
-
+    /**
+     * Creates a block of a certain type.
+     *
+     * @param type the type of the block (like DIRT, COAL....
+     */
     public Block(BlockType type) {
         this.type = type;
         this.mined = false;
     }
-
-    public void draw(Graphics g, int x, int y, int tileSize) {
+    /**
+     * Draws the block using the correct image.
+     *
+     * @param g the Graphics object used to draw
+     * @param x the x position on screen
+     * @param y the y position on screen
+     * @param blockSize the size of the block
+     */
+    public void draw(Graphics g, int x, int y, int blockSize) {
         Image img = switch (type) {
             case DIRT -> dirtImg;
             case COAL -> coalImg;
@@ -36,7 +50,7 @@ public class Block {
             case COLUMN -> columnImg;
             default -> emptyImg;
         };
-        g.drawImage(img, x, y, tileSize, tileSize, null);
+        g.drawImage(img, x, y, blockSize, blockSize, null);
     }
 
     public BlockType getType() {

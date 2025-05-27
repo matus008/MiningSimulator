@@ -2,7 +2,9 @@ package Rooms;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * This class is used for custom backroundimg that is drawn.
+ */
 public class MainPanel extends JPanel {
 
     private final ImageIcon backgroundImage;

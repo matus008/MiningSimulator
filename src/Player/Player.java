@@ -5,7 +5,10 @@ import BlockP.Valuables.Ores;
 
 import javax.swing.*;
 import java.util.ArrayList;
-
+/**
+ * Represents the player in the game.
+ * Handles player inventory, balance, upgrades, and tools.
+ */
 public class Player {
     private final Miner miner;
     private ArrayList<Ores> backpack;
@@ -14,7 +17,10 @@ public class Player {
     private int backPackSize = 10;
     private int ladderCount;
     private int columnCount;
-
+    /**
+     * Creates a new player with default stats.
+     * Starts with 500 gold and a miner at position (middle now  x 50 y 50 ).
+     */
     public Player() {
         this.backpack = new ArrayList<>();
         this.balance = 500;
@@ -31,7 +37,9 @@ public class Player {
     public void addOre(Ores ore) {
         backpack.add(ore);
     }
-
+    /**
+     * Sells all ores in the backpack and adds their value to the player's balance.
+     */
     public void sellAllOres() {
         int totalValue = 0;
         for (Ores ore : backpack) {
@@ -50,7 +58,11 @@ public class Player {
     public void setBalance(int balance) {
         this.balance = balance;
     }
-
+    /**
+     * Reduces player's balance by a specific amount.
+     *
+     * @param amount the amount to subtract
+     */
     public void reduceBalance(int amount) {
         balance -= amount;
     }
@@ -70,7 +82,12 @@ public class Player {
     public ArrayList<Ores> getBackpack() {
         return backpack;
     }
-
+    /**
+     * Applies an upgrade item to the player.
+     * Either increases backpack capacity or pickaxe tier.
+     *
+     * @param item the item to be upgraded
+     */
     public void PlusUpgrade(Item item) {
         if (item.getName().equalsIgnoreCase("BackPackUpgrade")) {
             backPackSize += 5;
@@ -82,7 +99,11 @@ public class Player {
     public int getLadderCount() {
         return ladderCount;
     }
-
+    /**
+     * Adds ladders to the player's inventory.
+     *
+     * @param amount number of ladders to add
+     */
     public void addLadders(int amount) {
         System.out.println("zebrik byl pridan o tolikhle zebriku" + amount);
         ladderCount = ladderCount + amount;
@@ -100,6 +121,9 @@ public class Player {
     public void addColumns(int amount) {
         columnCount = columnCount + amount;
     }
+    /**
+     * Uses one column from inventory, if available.
+     */
     public void useColumn() {
         if (columnCount > 0) {
             columnCount--;

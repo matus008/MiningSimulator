@@ -3,6 +3,7 @@ package Rooms;
 import BlockP.*;
 import BlockP.Other.ColumnBlock;
 import BlockP.Other.EmptyBlock;
+import BlockP.Other.StartingBlock;
 import BlockP.Other.StoneBlock;
 import Player.Player;
 import BlockP.Valuables.*;
@@ -71,7 +72,7 @@ public class MinePanel extends JPanel implements KeyListener {
         }
         int startX = MAP_WIDTH / 2;
         int startY = MAP_HEIGHT / 2;
-        map[startX][startY] = new Block(BlockType.START);
+        map[startX][startY] = new StartingBlock();
         playerX = startX;
         playerY = startY;
 
@@ -119,7 +120,7 @@ public class MinePanel extends JPanel implements KeyListener {
         int ly = 0;
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W, KeyEvent.VK_UP -> { ly = -1; mineX = 0; mineY = -1; }
-            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> { ly = 1; mineX = 0; mineY = 1; }
+            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {ly = 1; mineX = 0; mineY = 1;}
             case KeyEvent.VK_A, KeyEvent.VK_LEFT -> { lx = -1; mineX = -1; mineY = 0; }
             case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { lx = 1; mineX = 1; mineY = 0; }
             case KeyEvent.VK_SPACE -> mineBlock();

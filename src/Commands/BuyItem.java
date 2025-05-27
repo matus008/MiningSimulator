@@ -5,20 +5,33 @@ import ShopItems.*;
 import Rooms.Shop;
 
 import javax.swing.*;
-
+/**
+ * This command handles buying items from the shop.
+ * It checks if the player has enough money and adds the items if the purchase is successful.
+ */
 public class BuyItem implements Command {
     private Shop shop;
     private Item item;
     private int quantity;
     private Player player;
-
+    /**
+     * Creates a new BuyItem command.
+     *
+     * @param shop the shop where the item is being bought
+     * @param item the item to buy
+     * @param quantity how many pieces the player wants to buy
+     * @param player the player buying the item
+     */
     public BuyItem(Shop shop, Item item, int quantity, Player player) {
         this.shop = shop;
         this.item = item;
         this.quantity = quantity;
         this.player = player;
     }
-
+    /**
+     * Executes the purchase.
+     * Checks if the player has enough gold, subtracts it, and adds the item.
+     */
     @Override
     public void execute() {
         int totalPrice = item.getPrize() * quantity;
