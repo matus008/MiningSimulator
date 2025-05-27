@@ -36,7 +36,6 @@ public class Gamble implements Command{
 
     @Override
     public void exit() {
-
     }
 }
 

@@ -1,10 +1,7 @@
 package Rooms;
 
+import Commands.*;
 import ShopItems.*;
-import Commands.BuyItem;
-import Commands.Exit;
-import Commands.SellItem;
-import Commands.Command;
 import Player.Player;
 
 import javax.swing.*;
@@ -130,6 +127,20 @@ public class Shop extends JFrame {
             Command exit = new Exit(this, player);
             exit.execute();
         });
+
+        JButton GambleButton = new JButton("");
+        GambleButton.setFont(new Font("", Font.BOLD, 32));
+        GambleButton.setSize(400,50);
+        GambleButton.setLocation(1200, 800);
+        GambleButton.setContentAreaFilled(true);
+        GambleButton.setBorderPainted(true);
+        GambleButton.setFocusPainted(true);
+        GambleButton.setOpaque(true);
+        GambleButton.addActionListener(e -> {
+            gambleMoney();
+        });
+
+
         backgroundPanel.add(buyPickaxe);
         backgroundPanel.add(buyLadder);
         backgroundPanel.add(buyColum);
@@ -137,7 +148,7 @@ public class Shop extends JFrame {
         backgroundPanel.add(buyDynamite);
         backgroundPanel.add(sellButton);
         backgroundPanel.add(exitButton);
-
+        backgroundPanel.add(GambleButton);
         setVisible(true);
     }
 
@@ -217,5 +228,46 @@ public class Shop extends JFrame {
 
         Command buyCommand = new BuyItem(this, item, quantity, player);
         buyCommand.execute();
+    }
+    private void gambleMoney(){
+        int amount = 0;
+        if (true) {
+            String input = JOptionPane.showInputDialog(null,
+                    "How much money would you like to gamble ? ",
+                    "Gamble",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (input == null || input.trim().isEmpty()) {
+                input = "0";
+            }
+
+            try {
+                amount = Integer.parseInt(input.trim());
+                if (amount < 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid quantity! Must be a positive number.",
+                            "Input Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (amount > player.getBalance()){
+                    JOptionPane.showMessageDialog(null,
+                            "You dont have that much money u have: " + player.getBalance(),
+                            "InputError",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null,
+                        "Invalid input! Please enter a valid number.",
+                        "Input Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }else {
+            amount = 1;
+        }
+        Command gamble = new Gamble(player, amount);
+        gamble.execute();
     }
 }
