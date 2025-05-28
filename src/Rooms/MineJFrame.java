@@ -5,8 +5,10 @@ import Player.Player;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class for fullscreen window and creates the MinePanel
+ */
 public class MineJFrame extends JFrame {
-
     public MineJFrame(Player player) {
         setUndecorated(true);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

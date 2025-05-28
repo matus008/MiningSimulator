@@ -5,12 +5,16 @@ import Player.Player;
 import javax.swing.*;
 import java.util.Random;
 
+/**
+ * Class to have a slim chance of winning a jackpot and doubeling players money
+ * or loosing it all.
+ */
 public class Gamble implements Command{
     private Player player;
     private int ToGamble;
     private Random rn;
     private int num;
-    //Jeste dodelat ohlidani vstupu pro gamble
+
     public Gamble(Player player, int money){
         this.player = player;
         this.ToGamble = money;

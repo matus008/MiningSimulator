@@ -1,5 +1,9 @@
 package ShopItems;
 
+/**
+ * class for representing unique items with their name
+ * and prize for each and every piece.
+ */
 public class Item {
     private int prize;
     private String name;

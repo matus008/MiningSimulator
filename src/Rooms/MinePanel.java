@@ -46,6 +46,12 @@ public class MinePanel extends JPanel implements KeyListener {
         repaint();
     }
 
+    /**
+     *
+     * @param player the player and all his upgrades that are in Mine.
+     *
+     * @param parentFrame frame that JPanel runs on.
+     */
     public MinePanel(Player player, JFrame parentFrame) {
         this.player = player;
         this.map = new Block[MAP_WIDTH][MAP_HEIGHT];
@@ -64,6 +70,10 @@ public class MinePanel extends JPanel implements KeyListener {
         this.parentFrame = parentFrame;
     }
 
+    /**
+     * Calls  BlockGenerator.generateRandomBlock() which creates a random block for
+     * each map[x][y].
+     */
     private void generateMap() {
         for (int x = 0; x < MAP_WIDTH; x++) {
             for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -78,6 +88,10 @@ public class MinePanel extends JPanel implements KeyListener {
 
     }
 
+    /**
+     * Draws the whole map and messages that are created while the code is running.
+     * @param g the <code>Graphics</code> object to protect
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -114,6 +128,10 @@ public class MinePanel extends JPanel implements KeyListener {
 
     }
 
+    /**
+     * Method for registering keyboard.
+     * @param e the event to be processed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         int lx = 0;
@@ -132,6 +150,17 @@ public class MinePanel extends JPanel implements KeyListener {
         repaint();
     }
 
+    /**
+     * Player moves only if all the conditions are met:
+     *  1. player is in the corridor of maps width and height.
+     *  2. the desired block of repositioning to is mined (empty, ladder, starting, column) .
+     *  3. if he wants to go up he can do so only if he is standing on LadderBlock.
+     * @param dx the x coordinate of the new location's
+     *           +- 1 depends on witch way he wants to go.
+     * @param dy the y coordinate of the new location's
+     *           +- 1 depends on witch way he wants to go.
+     *
+     */
     public void move(int dx, int dy) {
         int newX = playerX + dx;
         int newY = playerY + dy;
@@ -170,7 +199,7 @@ public class MinePanel extends JPanel implements KeyListener {
                     canMove = true;
                 }
             }
-            //  true pokud uzes  do strany nebo dolů:
+            //  hracovi se priradi nove x a y cordinace a premaluje se cely JPanel
             if (canMove) {
                 playerX = newX;
                 playerY = newY;
@@ -183,7 +212,13 @@ public class MinePanel extends JPanel implements KeyListener {
         }
     }
 
-    // metoda pomoci AI
+    // metoda pomoci ChatGpt AI
+    /**
+     * Creates timer for 0.05 sec. (speed of falling)
+     * If player moved on other position and there is an EmptyBlock
+     * under him, he starts falling -> the players y position increases
+     * until there is a solid block under him.
+     */
     private void fallIfNoGround() {
         Timer fallTimer = new Timer(50, null);
         fallTimer.addActionListener(e -> {
@@ -215,7 +250,13 @@ public class MinePanel extends JPanel implements KeyListener {
         fallTimer.start();
     }
 
-    // DeepL metoda
+    /**
+     *  Creates timer for 2sec after Stone block that is above the block that was mined
+     *  "falls" (moved 1 block under the position that the stone was generated).
+     *  And empty block is created at the previous position of StoneBlock.
+     * @param minedX x position of the block that was mined.
+     * @param minedY y position of the block that was mined.
+     */
     private void stoneFallingCheck(int minedX, int minedY) {
         Timer delay = new Timer(2000, null); // 2 sekundy
         delay.addActionListener(e -> {
@@ -243,16 +284,20 @@ public class MinePanel extends JPanel implements KeyListener {
         delay.start();
     }
 
+    /**
+     * Places Column at players current position if he has any.
+     * Then update map[][].
+     */
     private void placeColumn(){
         int targetX = playerX;
         int targetY = playerY;
         Block targetBlock = map[targetX][targetY];
         if (targetBlock.getType() != BlockType.EMPTY) {
-            showMessage("You can't place Ladder there.");
+            showMessage("You can't place Column there.");
             return;
         }
         if (player.getColumnCount() <= 0){
-            showMessage("You can't place column there king !!.");
+            showMessage("You dont have anu columns king !!");
         }else {
             map[targetX][targetY] = new ColumnBlock(BlockType.COLUMN);
             player.useColumn();
@@ -260,6 +305,11 @@ public class MinePanel extends JPanel implements KeyListener {
         }
 
     }
+
+    /**
+     * Places Ladder at the current position that the player stands
+     * at. only if he has any ladders that he bought.
+     */
     private void placeLadder() {
         int targetX = playerX;
         int targetY = playerY;
@@ -281,8 +331,13 @@ public class MinePanel extends JPanel implements KeyListener {
             map[targetX][targetY] = new Block(BlockType.LADDER);
         player.useLadder();
         repaint();
+        }
     }
-    }
+
+    /**
+     * Checks if player is standing at the StartingBock
+     * if he is ReturnToLobby() is called.
+     */
     private void checkReturnToLobby() {
         Block currentBlock = map[playerX][playerY];
         if (currentBlock.getType() == BlockType.START) {
@@ -291,6 +346,10 @@ public class MinePanel extends JPanel implements KeyListener {
             showMessage("You must stand on the start block to return.");
         }
     }
+
+    /**
+     * Makes new Main lobby and the MineFrame is closed.
+     */
     public void ReturnToLobby() {
 
         new MainLobby(player);
@@ -299,7 +358,12 @@ public class MinePanel extends JPanel implements KeyListener {
 
     }
 
-
+    /**
+     * Registers what type of block player want to mine and if he can (Only if the
+     * block isnt already mined + if player has good enough pickaxe)it replaces the
+     * block with an emptyBlock that is registered as mined = true. Then it checks if
+     * the mined block is any type of Ore and if it is, it is added into his BackPack.
+     */
     private void mineBlock() {
         canMine = false;
         int targetX = playerX + mineX;

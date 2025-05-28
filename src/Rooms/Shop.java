@@ -11,11 +11,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
+/**
+ * Class for player to upgrade his gear and maybe become RICH.
+ */
 public class Shop extends JFrame {
     private Player player;
     private ArrayList<Item> upgrades;
 
+    /**
+     *
+     * @param player
+     */
     public Shop(Player player) {
         this.upgrades = new ArrayList<>();
         this.player = player;
@@ -23,7 +29,7 @@ public class Shop extends JFrame {
         setUndecorated(true);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+        // draws the backround img useing ShopPanel
         ImageIcon bgImage = new ImageIcon(getClass().getResource("/Textures/shop.png"));
         ShopPanel backgroundPanel = new ShopPanel(bgImage);
         setContentPane(backgroundPanel);
@@ -36,7 +42,7 @@ public class Shop extends JFrame {
 
 
 
-
+        //Buy button Pickaxe
         JButton buyPickaxe = new JButton("");
         buyPickaxe.setFont(new Font("Arial", Font.BOLD, 32));
         buyPickaxe.setSize(400,50);
@@ -49,7 +55,7 @@ public class Shop extends JFrame {
 
             handlePurchase(upgrades.get(4));
         });
-
+        //Buy button Ladder
         JButton buyLadder= new JButton("");
         buyLadder.setFont(new Font("Arial", Font.BOLD, 32));
         buyLadder.setSize(400,50);
@@ -62,7 +68,7 @@ public class Shop extends JFrame {
 
             handlePurchase(upgrades.get(3));
         });
-
+        //Buy button BackPack
         JButton buyBackPAck = new JButton("");
         buyBackPAck.setFont(new Font("Arial", Font.BOLD, 32));
         buyBackPAck.setSize(400,50);
@@ -75,7 +81,7 @@ public class Shop extends JFrame {
 
             handlePurchase(upgrades.get(0));
         });
-
+        //Buy button Dynamite
         JButton buyDynamite = new JButton("");
         buyDynamite.setFont(new Font("Arial", Font.BOLD, 32));
         buyDynamite.setSize(400,50);
@@ -88,7 +94,7 @@ public class Shop extends JFrame {
 
             handlePurchase(upgrades.get(2));
         });
-
+        //Buy button Column
         JButton buyColum = new JButton("");
         buyColum.setFont(new Font("Arial", Font.BOLD, 32));
         buyColum.setSize(400,50);
@@ -101,7 +107,7 @@ public class Shop extends JFrame {
             handlePurchase(upgrades.get(1));
         });
 
-
+         //Sell Button
         JButton sellButton = new JButton("");
         sellButton.setFont(new Font("", Font.BOLD, 32));
         sellButton.setSize(740,90);
@@ -114,7 +120,7 @@ public class Shop extends JFrame {
             Command sell = new SellItem(player);
             sell.execute();
         });
-
+        // Exit button
         JButton exitButton = new JButton("");
         exitButton.setFont(new Font("", Font.BOLD, 32));
         exitButton.setSize(740,90);
@@ -127,7 +133,7 @@ public class Shop extends JFrame {
             Command exit = new Exit(this, player);
             exit.execute();
         });
-
+        // Gamble button
         JButton GambleButton = new JButton("");
         GambleButton.setFont(new Font("", Font.BOLD, 32));
         GambleButton.setSize(400,50);
@@ -152,6 +158,9 @@ public class Shop extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Adds the items that are in shopFile and adds them to SHOP with their pricing.
+     */
     private void initializeItems() {
         upgrades = new ArrayList<>();
 
@@ -193,6 +202,10 @@ public class Shop extends JFrame {
         return upgrades;
     }
 
+    /**
+     * Handles how much of the item player wants to buy.
+     * @param item item to be bought.
+     */
     private void handlePurchase(Item item) {
         int quantity = 0;
 
@@ -229,6 +242,10 @@ public class Shop extends JFrame {
         Command buyCommand = new BuyItem(this, item, quantity, player);
         buyCommand.execute();
     }
+
+    /**
+     * Handles money to be gambled
+     */
     private void gambleMoney(){
         int amount = 0;
         if (true) {
