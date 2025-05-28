@@ -66,8 +66,25 @@ public class MinePanel extends JPanel implements KeyListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         cameraWidthInBlocks = screenSize.width / BLOCK_SIZE;
         cameraHeightInBlocks = screenSize.height / BLOCK_SIZE;
-
+        int w = screenSize.width;
+        int h = screenSize.height;
         this.parentFrame = parentFrame;
+
+        // Exit button
+        JButton giveUP = new JButton("Give up ");
+        giveUP.setFont(new Font("Give up ", Font.BOLD, 32));
+        giveUP.setSize(740,90);
+        giveUP.setLocation((int)(w * 0.52), (int)(h * 0.89));
+        giveUP.setContentAreaFilled(true);
+        giveUP.setBorderPainted(true);
+        giveUP.setFocusPainted(true);
+        giveUP.setOpaque(true);
+        giveUP.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                parentFrame.dispose();
+            }
+        });
+        add(giveUP);
     }
 
     /**
@@ -251,38 +268,49 @@ public class MinePanel extends JPanel implements KeyListener {
     }
 
     /**
-     *  Creates timer for 2sec after Stone block that is above the block that was mined
-     *  "falls" (moved 1 block under the position that the stone was generated).
-     *  And empty block is created at the previous position of StoneBlock.
+     * Creates timer for 2 sec after a STONE block (if any) above mined position
+     * falls down one or more blocks until it hits a solid block or COLUMN.
      * @param minedX x position of the block that was mined.
      * @param minedY y position of the block that was mined.
      */
     private void stoneFallingCheck(int minedX, int minedY) {
-        Timer delay = new Timer(2000, null); // 2 sekundy
-        delay.addActionListener(e -> {
-            int aboveY = minedY - 1;
-            if (aboveY < 0) {
-                return;
-            }
-            if (map[minedX][minedY].getType() == BlockType.COLUMN) {
-                ((Timer) e.getSource()).stop();
-                System.out.println("Funguje zastaveni");
-            }
+        int startY = minedY - 1;
 
-            Block above = map[minedX][aboveY];
-            if (above.getType() == BlockType.STONE) {
-                Block below = map[minedX][minedY];
-                if (below.getType() == BlockType.EMPTY) {
-                    System.out.println("nezastavilo");
-                    map[minedX][aboveY] = new EmptyBlock();
-                    map[minedX][minedY] = new StoneBlock(BlockType.STONE);
+        if (startY < 0 || map[minedX][startY].getType() != BlockType.STONE) return;
+
+        Timer stoneFall = new Timer(200, null); // kazdych 200ms = padany
+        stoneFall.addActionListener(new ActionListener() {
+            int fallingY = startY;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int nextY = fallingY + 1;
+
+                if (nextY >= MAP_HEIGHT) {
+                    ((Timer) e.getSource()).stop();
+                    return;
+                }
+
+                Block below = map[minedX][nextY];
+                if (below.getType() == BlockType.EMPTY ||below.getType() == BlockType.LADDER) {
+                    // posun kamene dolů
+                    map[minedX][fallingY] = new EmptyBlock();
+                    map[minedX][nextY] = new StoneBlock(BlockType.STONE);
+                    fallingY++;
                     repaint();
+                } else {
+                    ((Timer) e.getSource()).stop();
                 }
             }
         });
-        delay.setRepeats(false);
-        delay.start();
+
+        // Start falling after 2 seconds delay
+        new Timer(2000, e -> stoneFall.start()) {{
+            setRepeats(false);
+            start();
+        }};
     }
+
 
     /**
      * Places Column at players current position if he has any.

@@ -25,6 +25,8 @@ public class MainLobby extends JFrame {
         setLayout(null);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int w = screenSize.width;
+        int h = screenSize.height;
         // Set background image using custom panel
         ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/Textures/MiningSimulator - MainLobby.jpg"));
         MainPanel contentPanel = new MainPanel(backgroundImage);
@@ -37,7 +39,7 @@ public class MainLobby extends JFrame {
         add(title);
         // Mine button
         JButton mineButton = new JButton("MINE");
-        mineButton.setFont(new Font("", Font.BOLD, 140));
+        mineButton.setFont(new Font("", Font.BOLD, 100));
         mineButton.setForeground(new Color(89, 45, 0));
         mineButton.setContentAreaFilled(false);
         mineButton.setBorderPainted(false);
@@ -45,7 +47,7 @@ public class MainLobby extends JFrame {
         mineButton.setOpaque(false);
 
         mineButton.setSize(400, 120);
-        mineButton.setLocation(228, 291);
+        mineButton.setLocation((int)(w * 0.12), (int)(h * 0.26));
 
         mineButton.addActionListener(e -> {
             new MineJFrame(player);
@@ -54,7 +56,7 @@ public class MainLobby extends JFrame {
         add(mineButton);
         // Shop button
         JButton shopButton = new JButton("SHOP");
-        shopButton.setFont(new Font("", Font.BOLD, 130));
+        shopButton.setFont(new Font("", Font.BOLD, 80));
         shopButton.setForeground(new Color(89, 45, 0));
         shopButton.setContentAreaFilled(false);
         shopButton.setBorderPainted(false);
@@ -62,7 +64,7 @@ public class MainLobby extends JFrame {
         shopButton.setOpaque(false);
 
         shopButton.setSize(500, 120);
-        shopButton.setLocation(1131, 403);
+        shopButton.setLocation((int)(w * 0.55), (int)(h * 0.378));
 
         shopButton.addActionListener(e -> {
             new Shop(player);

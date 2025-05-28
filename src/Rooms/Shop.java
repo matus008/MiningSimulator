@@ -43,10 +43,10 @@ public class Shop extends JFrame {
 
 
         //Buy button Pickaxe
-        JButton buyPickaxe = new JButton("");
+        JButton buyPickaxe = new JButton(" ");
         buyPickaxe.setFont(new Font("Arial", Font.BOLD, 32));
         buyPickaxe.setSize(400,50);
-        buyPickaxe.setLocation(758, 843);
+        buyPickaxe.setLocation((int)(w * 0.395), (int)(h * 0.78));
         buyPickaxe.setContentAreaFilled(false);
         buyPickaxe.setBorderPainted(false);
         buyPickaxe.setFocusPainted(false);
@@ -56,10 +56,10 @@ public class Shop extends JFrame {
             handlePurchase(upgrades.get(4));
         });
         //Buy button Ladder
-        JButton buyLadder= new JButton("");
+        JButton buyLadder= new JButton(" ");
         buyLadder.setFont(new Font("Arial", Font.BOLD, 32));
         buyLadder.setSize(400,50);
-        buyLadder.setLocation(165, 843);
+        buyLadder.setLocation((int)(w * 0.085), (int)(h * 0.78));
         buyLadder.setContentAreaFilled(false);
         buyLadder.setBorderPainted(false);
         buyLadder.setFocusPainted(false);
@@ -69,10 +69,10 @@ public class Shop extends JFrame {
             handlePurchase(upgrades.get(3));
         });
         //Buy button BackPack
-        JButton buyBackPAck = new JButton("");
+        JButton buyBackPAck = new JButton("  ");
         buyBackPAck.setFont(new Font("Arial", Font.BOLD, 32));
         buyBackPAck.setSize(400,50);
-        buyBackPAck.setLocation(165, 488);
+        buyBackPAck.setLocation((int)(w * 0.085), (int)(h * 0.45));
         buyBackPAck.setContentAreaFilled(false);
         buyBackPAck.setBorderPainted(false);
         buyBackPAck.setFocusPainted(false);
@@ -81,11 +81,24 @@ public class Shop extends JFrame {
 
             handlePurchase(upgrades.get(0));
         });
+
+        //Buy button Column
+        JButton buyColum = new JButton(" ");
+        buyColum.setFont(new Font("Arial", Font.BOLD, 32));
+        buyColum.setSize(400,50);
+        buyColum.setLocation((int)(w * 0.395), (int)(h * 0.45));
+        buyColum.setContentAreaFilled(false);
+        buyColum.setBorderPainted(false);
+        buyColum.setFocusPainted(false);
+        buyColum.setOpaque(false);
+        buyColum.addActionListener(e -> {
+            handlePurchase(upgrades.get(1));
+        });
         //Buy button Dynamite
-        JButton buyDynamite = new JButton("");
+        JButton buyDynamite = new JButton(" ");
         buyDynamite.setFont(new Font("Arial", Font.BOLD, 32));
         buyDynamite.setSize(400,50);
-        buyDynamite.setLocation(1355, 488);
+        buyDynamite.setLocation((int)(w * 0.705), (int)(h * 0.45));
         buyDynamite.setContentAreaFilled(false);
         buyDynamite.setBorderPainted(false);
         buyDynamite.setFocusPainted(false);
@@ -94,24 +107,12 @@ public class Shop extends JFrame {
 
             handlePurchase(upgrades.get(2));
         });
-        //Buy button Column
-        JButton buyColum = new JButton("");
-        buyColum.setFont(new Font("Arial", Font.BOLD, 32));
-        buyColum.setSize(400,50);
-        buyColum.setLocation(758, 488);
-        buyColum.setContentAreaFilled(false);
-        buyColum.setBorderPainted(false);
-        buyColum.setFocusPainted(false);
-        buyColum.setOpaque(false);
-        buyColum.addActionListener(e -> {
-            handlePurchase(upgrades.get(1));
-        });
 
          //Sell Button
-        JButton sellButton = new JButton("");
+        JButton sellButton = new JButton(" ");
         sellButton.setFont(new Font("", Font.BOLD, 32));
         sellButton.setSize(740,90);
-        sellButton.setLocation(180, 950);
+        sellButton.setLocation((int)(w * 0.08), (int)(h * 0.89));
         sellButton.setContentAreaFilled(false);
         sellButton.setBorderPainted(false);
         sellButton.setFocusPainted(false);
@@ -124,7 +125,7 @@ public class Shop extends JFrame {
         JButton exitButton = new JButton("");
         exitButton.setFont(new Font("", Font.BOLD, 32));
         exitButton.setSize(740,90);
-        exitButton.setLocation(1000, 950);
+        exitButton.setLocation((int)(w * 0.52), (int)(h * 0.89));
         exitButton.setContentAreaFilled(false);
         exitButton.setBorderPainted(false);
         exitButton.setFocusPainted(false);
@@ -137,11 +138,11 @@ public class Shop extends JFrame {
         JButton GambleButton = new JButton("");
         GambleButton.setFont(new Font("", Font.BOLD, 32));
         GambleButton.setSize(400,50);
-        GambleButton.setLocation(1200, 800);
-        GambleButton.setContentAreaFilled(true);
-        GambleButton.setBorderPainted(true);
-        GambleButton.setFocusPainted(true);
-        GambleButton.setOpaque(true);
+        GambleButton.setLocation((int)(w * 0.705), (int)(h * 0.78));
+        GambleButton.setContentAreaFilled(false);
+        GambleButton.setBorderPainted(false);
+        GambleButton.setFocusPainted(false);
+        GambleButton.setOpaque(false);
         GambleButton.addActionListener(e -> {
             gambleMoney();
         });
