@@ -91,7 +91,7 @@ public class MinePanel extends JPanel implements KeyListener {
      * Calls  BlockGenerator.generateRandomBlock() which creates a random block for
      * each map[x][y].
      */
-    private void generateMap() {
+    public void generateMap() {
         for (int x = 0; x < MAP_WIDTH; x++) {
             for (int y = 0; y < MAP_HEIGHT; y++) {
                 map[x][y] = BlockGenerator.generateRandomBlock();
@@ -407,7 +407,7 @@ public class MinePanel extends JPanel implements KeyListener {
      * block with an emptyBlock that is registered as mined = true. Then it checks if
      * the mined block is any type of Ore and if it is, it is added into his BackPack.
      */
-    private void mineBlock() {
+    public void mineBlock() {
         canMine = false;
         int targetX = playerX + mineX;
         int targetY = playerY + mineY;

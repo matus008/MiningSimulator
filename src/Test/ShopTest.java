@@ -4,7 +4,6 @@ import Commands.BuyItem;
 import Commands.Command;
 import Rooms.Shop;
 import ShopItems.Item;
-import ShopItems.BackpackUpgrade; // nebo jiný konkrétní item
 import Player.Player;
 import ShopItems.Ladder;
 import org.junit.jupiter.api.BeforeEach;
