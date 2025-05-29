@@ -290,9 +290,24 @@ public class MinePanel extends JPanel implements KeyListener {
                     ((Timer) e.getSource()).stop();
                     return;
                 }
+                // 💀 Zasáhnutí hráče = smrt
+                if (playerX == minedX && playerY == nextY) {
+                    ((Timer) e.getSource()).stop();
+                    JOptionPane.showMessageDialog(null, "You got crushed by a falling stone! Would you like to start over ? ");
+
+
+                    Player newPlayer = new Player();
+
+
+                    new MainLobby(newPlayer);
+
+
+                    parentFrame.dispose();
+                    return;
+                }
 
                 Block below = map[minedX][nextY];
-                if (below.getType() == BlockType.EMPTY ||below.getType() == BlockType.LADDER) {
+                if (below.getType() == BlockType.EMPTY ||below.getType() == BlockType.LADDER ) {
                     // posun kamene dolů
                     map[minedX][fallingY] = new EmptyBlock();
                     map[minedX][nextY] = new StoneBlock(BlockType.STONE);

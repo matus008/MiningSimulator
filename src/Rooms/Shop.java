@@ -207,7 +207,7 @@ public class Shop extends JFrame {
      * Handles how much of the item player wants to buy.
      * @param item item to be bought.
      */
-    private void handlePurchase(Item item) {
+    public void handlePurchase(Item item) {
         int quantity = 0;
 
         if (item instanceof Column || item instanceof Dynamite || item instanceof Ladder) {
