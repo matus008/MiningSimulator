@@ -135,11 +135,11 @@ public class Shop extends JFrame {
             exit.execute();
         });
         // Gamble button
-        JButton GambleButton = new JButton("");
+        JButton GambleButton = new JButton("Gamble ?");
         GambleButton.setFont(new Font("", Font.BOLD, 32));
         GambleButton.setSize(400,50);
         GambleButton.setLocation((int)(w * 0.705), (int)(h * 0.78));
-        GambleButton.setContentAreaFilled(false);
+        GambleButton.setContentAreaFilled(true);
         GambleButton.setBorderPainted(false);
         GambleButton.setFocusPainted(false);
         GambleButton.setOpaque(false);

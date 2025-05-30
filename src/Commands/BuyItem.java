@@ -45,6 +45,8 @@ public class BuyItem implements Command {
                 player.PlusUpgrade(item);
             }else if (item instanceof Column) {
                 player.addColumns(quantity);
+            }else if (item instanceof Dynamite){
+                player.addDynamite(quantity);
             }
 
             JOptionPane.showMessageDialog(null,

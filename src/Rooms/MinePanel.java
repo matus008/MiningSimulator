@@ -1,10 +1,7 @@
 package Rooms;
 
 import BlockP.*;
-import BlockP.Other.ColumnBlock;
-import BlockP.Other.EmptyBlock;
-import BlockP.Other.StartingBlock;
-import BlockP.Other.StoneBlock;
+import BlockP.Other.*;
 import Player.Player;
 import BlockP.Valuables.*;
 
@@ -40,6 +37,7 @@ public class MinePanel extends JPanel implements KeyListener {
     private String statusMessage = "";
     private long messageTimestamp = 0;
     private static final int MESSAGE_DURATION_MS = 3000;
+
     private void showMessage(String msg) {
         statusMessage = msg;
         messageTimestamp = System.currentTimeMillis();
@@ -47,9 +45,7 @@ public class MinePanel extends JPanel implements KeyListener {
     }
 
     /**
-     *
-     * @param player the player and all his upgrades that are in Mine.
-     *
+     * @param player      the player and all his upgrades that are in Mine.
      * @param parentFrame frame that JPanel runs on.
      */
     public MinePanel(Player player, JFrame parentFrame) {
@@ -73,8 +69,8 @@ public class MinePanel extends JPanel implements KeyListener {
         // Exit button
         JButton giveUP = new JButton("Give up ");
         giveUP.setFont(new Font("Give up ", Font.BOLD, 32));
-        giveUP.setSize(740,90);
-        giveUP.setLocation((int)(w * 0.52), (int)(h * 0.89));
+        giveUP.setSize(740, 90);
+        giveUP.setLocation((int) (w * 0.52), (int) (h * 0.89));
         giveUP.setContentAreaFilled(true);
         giveUP.setBorderPainted(true);
         giveUP.setFocusPainted(true);
@@ -107,6 +103,7 @@ public class MinePanel extends JPanel implements KeyListener {
 
     /**
      * Draws the whole map and messages that are created while the code is running.
+     *
      * @param g the <code>Graphics</code> object to protect
      */
     @Override
@@ -147,6 +144,7 @@ public class MinePanel extends JPanel implements KeyListener {
 
     /**
      * Method for registering keyboard.
+     *
      * @param e the event to be processed
      */
     @Override
@@ -154,14 +152,31 @@ public class MinePanel extends JPanel implements KeyListener {
         int lx = 0;
         int ly = 0;
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W, KeyEvent.VK_UP -> { ly = -1; mineX = 0; mineY = -1; }
-            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {ly = 1; mineX = 0; mineY = 1;}
-            case KeyEvent.VK_A, KeyEvent.VK_LEFT -> { lx = -1; mineX = -1; mineY = 0; }
-            case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> { lx = 1; mineX = 1; mineY = 0; }
+            case KeyEvent.VK_W, KeyEvent.VK_UP -> {
+                ly = -1;
+                mineX = 0;
+                mineY = -1;
+            }
+            case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
+                ly = 1;
+                mineX = 0;
+                mineY = 1;
+            }
+            case KeyEvent.VK_A, KeyEvent.VK_LEFT -> {
+                lx = -1;
+                mineX = -1;
+                mineY = 0;
+            }
+            case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> {
+                lx = 1;
+                mineX = 1;
+                mineY = 0;
+            }
             case KeyEvent.VK_SPACE -> mineBlock();
             case KeyEvent.VK_E -> placeLadder();
             case KeyEvent.VK_R -> checkReturnToLobby();
             case KeyEvent.VK_C -> placeColumn();
+            case KeyEvent.VK_F -> activateDynamite();
         }
         move(lx, ly);
         repaint();
@@ -169,14 +184,14 @@ public class MinePanel extends JPanel implements KeyListener {
 
     /**
      * Player moves only if all the conditions are met:
-     *  1. player is in the corridor of maps width and height.
-     *  2. the desired block of repositioning to is mined (empty, ladder, starting, column) .
-     *  3. if he wants to go up he can do so only if he is standing on LadderBlock.
+     * 1. player is in the corridor of maps width and height.
+     * 2. the desired block of repositioning to is mined (empty, ladder, starting, column) .
+     * 3. if he wants to go up he can do so only if he is standing on LadderBlock.
+     *
      * @param dx the x coordinate of the new location's
      *           +- 1 depends on witch way he wants to go.
      * @param dy the y coordinate of the new location's
      *           +- 1 depends on witch way he wants to go.
-     *
      */
     public void move(int dx, int dy) {
         int newX = playerX + dx;
@@ -203,9 +218,9 @@ public class MinePanel extends JPanel implements KeyListener {
             }
             // pohyb nahoru/dolu
             if (dy != 0) {
-                if (((currentType == BlockType.LADDER ) &&
-                        (targetType == BlockType.LADDER || targetType == BlockType.EMPTY)) || ((currentType == BlockType.EMPTY ) &&
-                        (targetType == BlockType.LADDER)) ) {
+                if (((currentType == BlockType.LADDER) &&
+                        (targetType == BlockType.LADDER || targetType == BlockType.EMPTY)) || ((currentType == BlockType.EMPTY) &&
+                        (targetType == BlockType.LADDER))) {
                     canMove = true;
                 }
             }
@@ -230,6 +245,7 @@ public class MinePanel extends JPanel implements KeyListener {
     }
 
     // metoda pomoci ChatGpt AI
+
     /**
      * Creates timer for 0.05 sec. (speed of falling)
      * If player moved on other position and there is an EmptyBlock
@@ -270,6 +286,7 @@ public class MinePanel extends JPanel implements KeyListener {
     /**
      * Creates timer for 2 sec after a STONE block (if any) above mined position
      * falls down one or more blocks until it hits a solid block or COLUMN.
+     *
      * @param minedX x position of the block that was mined.
      * @param minedY y position of the block that was mined.
      */
@@ -290,7 +307,7 @@ public class MinePanel extends JPanel implements KeyListener {
                     ((Timer) e.getSource()).stop();
                     return;
                 }
-                // 💀 Zasáhnutí hráče = smrt
+                //  spadne na hrace = smrt
                 if (playerX == minedX && playerY == nextY) {
                     ((Timer) e.getSource()).stop();
                     JOptionPane.showMessageDialog(null, "You got crushed by a falling stone! Would you like to start over ? ");
@@ -307,7 +324,7 @@ public class MinePanel extends JPanel implements KeyListener {
                 }
 
                 Block below = map[minedX][nextY];
-                if (below.getType() == BlockType.EMPTY ||below.getType() == BlockType.LADDER ) {
+                if (below.getType() == BlockType.EMPTY || below.getType() == BlockType.LADDER) {
                     // posun kamene dolů
                     map[minedX][fallingY] = new EmptyBlock();
                     map[minedX][nextY] = new StoneBlock(BlockType.STONE);
@@ -331,7 +348,7 @@ public class MinePanel extends JPanel implements KeyListener {
      * Places Column at players current position if he has any.
      * Then update map[][].
      */
-    private void placeColumn(){
+    private void placeColumn() {
         int targetX = playerX;
         int targetY = playerY;
         Block targetBlock = map[targetX][targetY];
@@ -339,9 +356,9 @@ public class MinePanel extends JPanel implements KeyListener {
             showMessage("You can't place Column there.");
             return;
         }
-        if (player.getColumnCount() <= 0){
+        if (player.getColumnCount() <= 0) {
             showMessage("You dont have anu columns king !!");
-        }else {
+        } else {
             map[targetX][targetY] = new ColumnBlock(BlockType.COLUMN);
             player.useColumn();
             repaint();
@@ -370,12 +387,59 @@ public class MinePanel extends JPanel implements KeyListener {
 
         if (player.getLadderCount() <= 0) {
             showMessage("You dont have any ladders left king!");
-        }else  {
+        } else {
             map[targetX][targetY] = new Block(BlockType.LADDER);
-        player.useLadder();
-        repaint();
+            player.useLadder();
+            repaint();
         }
     }
+
+    private void activateDynamite() {
+
+        if (player.getDynamiteCount() > 0) {
+            //place dynamite
+            map[playerX][playerY] = new DynamiteBlock(BlockType.DYNAMITE);
+            int centerX = playerX;
+            int centerY = playerY;
+            int radius = 2;
+
+            // Timer for explosion after 3 sec
+            Timer explosionDelay = new Timer(3000, e -> {
+                for (int dx = -radius; dx <= radius; dx++) {
+                    for (int dy = -radius; dy <= radius; dy++) {
+                        int x = centerX + dx;
+                        int y = centerY + dy;
+
+                        if (x >= 0 && x < MAP_WIDTH && y >= 0 && y < MAP_HEIGHT
+                                && map[x][y].getType() != BlockType.START) {
+                            if (map[x][y] == map[playerX][playerY]) {
+                                JOptionPane.showMessageDialog(null,
+                                        "You just bombed yourself?! would you like to try again ? ");
+
+                                Player newPlayer = new Player();
+                                new MainLobby(newPlayer);
+                                parentFrame.dispose();
+                                return;
+                            }
+                            map[x][y] = new EmptyBlock();
+                        }
+                    }
+                }
+
+                player.useDynamite();
+                repaint();
+            });
+
+            explosionDelay.setRepeats(false);
+            explosionDelay.start();
+
+        } else {
+            showMessage("No dynamite left!");
+        }
+
+
+    }
+
 
     /**
      * Checks if player is standing at the StartingBock
@@ -426,10 +490,10 @@ public class MinePanel extends JPanel implements KeyListener {
                 if (player.getPUpgradeCounter() < requiredUpgrades) {
                     showMessage("You need " + requiredUpgrades + " Pickaxe Upgrades to mine " + type + "!");
                     canMine = false;
-                }else if (current.getType() == BlockType.STONE) {
+                } else if (current.getType() == BlockType.STONE) {
                     showMessage("You cannot mine this block!!");
                     canMine = false;
-                }else {
+                } else {
                     canMine = true;
                 }
                 if (canMine) {
@@ -437,7 +501,7 @@ public class MinePanel extends JPanel implements KeyListener {
                     map[targetX][targetY] = new EmptyBlock();
                     System.out.println("vytezeno " + player.getBackpack().size());
                     stoneFallingCheck(targetX, targetY);
-                    if (type != BlockType.DIRT  ) {
+                    if (type != BlockType.DIRT) {
 
                         try {
                             Ores ore = switch (type) {
@@ -451,7 +515,7 @@ public class MinePanel extends JPanel implements KeyListener {
                                 if (player.getBackPackSize() > player.getBackpack().size()) {
                                     player.addOre(ore);
                                 } else {
-                                    JOptionPane.showMessageDialog(null, "Your backpack is full!");
+                                    showMessage("Your backpack is full!");
                                 }
                             }
                         } catch (Exception ignored) {
@@ -469,19 +533,20 @@ public class MinePanel extends JPanel implements KeyListener {
     public Block[][] getMap() {
         return map;
     }
+
     public int getPlayerX() {
         return playerX;
     }
+
     public int getPlayerY() {
         return playerY;
     }
-    public int getMineX() {
-        return mineX;
-    }
-    public int getMineY() {
-        return mineY;
+
+    @Override
+    public void keyTyped(KeyEvent e) {
     }
 
-    @Override public void keyTyped(KeyEvent e) {}
-    @Override public void keyReleased(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
 }

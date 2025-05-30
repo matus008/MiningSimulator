@@ -20,6 +20,7 @@ public class Block {
     private static final Image startImg = new ImageIcon("src/Textures/start.png").getImage();
     private static final Image stoneImg = new ImageIcon("src/Textures/stone.png").getImage();
     private static final Image columnImg = new ImageIcon("src/Textures/column.png").getImage();
+    private static final Image dynamiteImg = new ImageIcon("src/Textures/dynamite.png").getImage();
     /**
      * Creates a block of a certain type.
      *
@@ -48,6 +49,7 @@ public class Block {
             case START -> startImg;
             case STONE -> stoneImg;
             case COLUMN -> columnImg;
+            case DYNAMITE -> dynamiteImg;
             default -> emptyImg;
         };
         g.drawImage(img, x, y, blockSize, blockSize, null);

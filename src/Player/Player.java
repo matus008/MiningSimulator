@@ -17,6 +17,7 @@ public class Player {
     private int backPackSize = 10;
     private int ladderCount;
     private int columnCount;
+    private int dynamiteCount;
     /**
      * Creates a new player with default stats.
      * Starts with 500 gold and a miner at position (middle now  x 50 y 50 ).
@@ -129,4 +130,15 @@ public class Player {
             columnCount--;
         }
     }
+    public int getDynamiteCount() {
+        return dynamiteCount; }
+
+    public void addDynamite(int amount) {
+        this.dynamiteCount += amount;
+    }
+
+    public void useDynamite() {
+        if (dynamiteCount > 0) dynamiteCount--;
+    }
+
 }
