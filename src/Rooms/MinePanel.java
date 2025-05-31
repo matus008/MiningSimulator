@@ -244,8 +244,8 @@ public class MinePanel extends JPanel implements KeyListener {
         }
     }
 
-    // metoda pomoci ChatGpt AI
 
+    // metoda pomoci: https://www.youtube.com/watch?v=HjzcZkzRDYs
     /**
      * Creates timer for 0.05 sec. (speed of falling)
      * If player moved on other position and there is an EmptyBlock
@@ -282,7 +282,7 @@ public class MinePanel extends JPanel implements KeyListener {
         });
         fallTimer.start();
     }
-
+    //metoda pomoci: https://www.youtube.com/watch?v=HjzcZkzRDYs
     /**
      * Creates timer for 2 sec after a STONE block (if any) above mined position
      * falls down one or more blocks until it hits a solid block or COLUMN.
